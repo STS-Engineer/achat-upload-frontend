@@ -11,6 +11,7 @@ import Button from "../../components/ui/button/Button";
 import Alert from "../../components/ui/alert/Alert";
 import { addTransaction, getTransactions } from "../../redux/transaction/transaction";
 import { resetTransactionState } from "../../redux/transaction/transaction-slice";
+import { MailIcon } from "../../icons";
 
 export default function FrameworkElements() {
   const dispatch = useDispatch();
@@ -62,11 +63,19 @@ export default function FrameworkElements() {
         {/* Grid list */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 ">
           {transactionsList.map((f: Transaction) => (
-            <div
+           <div
               key={f.id}
-              className="rounded-2xl border bg-white dark:bg-gray-900 shadow-sm p-6
+              className="relative rounded-2xl border bg-white dark:bg-gray-900 shadow-sm p-6
             flex flex-col justify-between hover:shadow-md transition bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100  dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"
             >
+            {new Date() > new Date(f.date_limite) && (
+                <button
+                  className="absolute top-3 right-3 p-2 rounded-full bg-blue-100 hover:bg-blue-200 
+                            dark:bg-blue-900/40 dark:hover:bg-blue-900 transition"
+                >
+                  <MailIcon className="w-4 h-4 text-blue-700 dark:text-blue-300" />
+                </button>
+              )}
               {/* Top */}
               <div className="space-y-1">
                 <h3 className="text-md font-normal text-gray-800 dark:text-gray-100">
@@ -85,7 +94,7 @@ export default function FrameworkElements() {
                     bg-red-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 
                     rounded-full"
                 >
-                  {f.date_limite}
+                  {new Date(f.date_limite).toLocaleString()}
                 </span>
               </div>
             </div>
