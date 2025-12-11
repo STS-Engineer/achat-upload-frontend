@@ -31,7 +31,7 @@ export default function FrameworkElements() {
   useEffect(() => {
     setTimeout(() => {
         if (toast === "Fichier uploadé avec succès") {
-            navigate("/achats");
+            navigate("/");
         }
     }, 1500);
   }, [toast, navigate]);

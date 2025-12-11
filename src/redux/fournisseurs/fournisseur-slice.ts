@@ -31,7 +31,7 @@ const Fournisseurslice = createSlice({
       state.error = false;
     },
     addFournisseurSuccess(state, action) {
-      state.fournisseursList.push(action.payload);
+      state.fournisseursList?.items.push(action.payload);
       state.toast = 'Fournisseur ajouté avec succès';
       state.success = true;
       state.error = false;
@@ -40,6 +40,11 @@ const Fournisseurslice = createSlice({
       state.toast = action.payload.detail;
       state.success = false;
       state.error = true;
+    },
+    resetFournisseurState(state) {
+      state.toast = '';
+      state.success = false;
+      state.error = false;
     }
   }
 })
@@ -50,7 +55,8 @@ export const {
     getFournisseursFailure,
     addFournisseurRequest,
     addFournisseurSuccess,
-    addFournisseurFailure
+    addFournisseurFailure,
+    resetFournisseurState
 } = Fournisseurslice.actions;
 
 export default Fournisseurslice.reducer;

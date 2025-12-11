@@ -3,9 +3,9 @@ import { getAchatsFailure, getAchatsRequest, getAchatsSuccess, uploadExcelFileFa
 import { GetAchats, UploadExcelFile } from "./achat-types";
 
 
-export const getachats: GetAchats = async (dispatch) => {
+export const getachats: GetAchats = async (page, per_page, dispatch) => {
   dispatch(getAchatsRequest());
-  const url = `/achat/all`;
+  const url = `/achat/all?page=${page}&per_page=${per_page}`;
 
   try {
     let response = await axiosInstance.get(url);

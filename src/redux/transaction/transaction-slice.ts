@@ -31,7 +31,7 @@ const Transactionslice = createSlice({
       state.error = false;
     },
     addTransactionSuccess(state, action) {
-      state.transactionsList.push(action.payload);
+      state.transactionsList.items.push(action.payload);
       state.toast = 'Transaction ajouté avec succès';
       state.success = true;
       state.error = false;
@@ -45,6 +45,20 @@ const Transactionslice = createSlice({
       state.success = false;
       state.error = false;
       state.toast = '';
+    },
+    sendEmailRequest(state) {
+      state.success = false;
+      state.error = false;
+    },
+    sendEmailSuccess(state) {
+      state.toast = 'Email envoyé avec succès';
+      state.success = true;
+      state.error = false;
+    },
+    sendEmailFailure(state, action) {
+      state.toast = action.payload.detail;
+      state.success = false;
+      state.error = true;
     }
   }
 })
@@ -56,7 +70,10 @@ export const {
     addTransactionRequest,
     addTransactionSuccess,
     addTransactionFailure,
-    resetTransactionState
+    resetTransactionState,
+    sendEmailRequest,
+    sendEmailSuccess,
+    sendEmailFailure
 } = Transactionslice.actions;
 
 export default Transactionslice.reducer;

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getachats } from "../../redux/achats/achat";
 import { Achat } from "../../redux/achats/achat-slice-types";
+import Pagination from "../../components/common/Pagination";
 
 export default function FormElements() {
   const navigate = useNavigate();
@@ -25,8 +26,12 @@ export default function FormElements() {
     navigate("/upload-achat");
   }
 
+  const handlePageChange = (page: number) => {
+    getachats(page, 5, dispatch);
+  };
+
   useEffect(() => {
-    getachats(dispatch);
+    getachats(1, 5, dispatch);
   }, [dispatch]);
 
   return (
@@ -75,8 +80,8 @@ export default function FormElements() {
 
                   {/* Table Body */}
                   <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    {achatsList?.length > 0 ? (
-                      achatsList.map((q: Achat) => (
+                    {achatsList?.achats?.length > 0 ? (
+                      achatsList.achats.map((q: Achat) => (
                           <TableRow
                             key={q.id}
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
@@ -127,6 +132,11 @@ export default function FormElements() {
                 </Table>
             </div>
           </div>
+          <Pagination
+            page={achatsList.page}
+            totalPages={achatsList.total_pages}
+            onPageChange={handlePageChange}
+          />
         </ComponentCard>
       </div>
     </div>

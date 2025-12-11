@@ -27,7 +27,7 @@ const navItems: NavItem[] = [
   {
     name: "achats",
     icon: <BookCheck className="w-5 h-5" />,
-    path: "/achats",
+    path: "/",
   },
   {
     name: "fournisseurs",
@@ -286,7 +286,7 @@ const AppSidebar: React.FC = () => {
               <div className="text-xl font-bold">
                   Supplier 
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0584CE] to-[#046EAF]">
-                  Logger
+                  Upload
                 </span>
                 <div className="border-b-2 border-indigo-200 dark:border-indigo-700 mt-1"></div>
               </div>

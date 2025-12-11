@@ -8,85 +8,122 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogs } from "../../redux/logs/logs";
 import { Log } from "../../redux/logs/logs-slice-types";
+import Pagination from "../../components/common/Pagination";
+import Input from "../../components/form/input/InputField";
+import { SearchCheck } from "lucide-react";
 
 export default function FormElements() {
   const dispatch = useDispatch();
+
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const per_page = 5;
+  const [description, setDescription] = useState("");
+
   const { logsList } = useSelector((state: any) => state.log);
-  
-  const headers = ["description"]
+
+  const headers = ["description"];
 
   useEffect(() => {
-    getLogs(dispatch);
-  }, [dispatch]);
+    getLogs(page, per_page, "", dispatch);
+  }, [dispatch, page]);
+
+  useEffect(() => {
+    if (description && description.length > 3) {
+      getLogs(page, per_page, description, dispatch);
+    }
+  }, [description, page, dispatch]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <div className="p-6 space-y-8">
       <PageMeta title="Logs" description="..." />
       <PageBreadcrumb pageTitle="Logs" />
+
       <div className="space-y-6">
         <ComponentCard title="Logs List">
           <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/[0.05] bg-white dark:bg-gray-900 shadow-lg">
+            <div className="flex justify-end w-full px-4 py-3">
+              <div className="relative w-full sm:w-[280px]">
+                <SearchCheck 
+                  className="absolute top-1/2 -translate-y-1/2 left-3 w-5 h-5"
+                />
+                <Input
+                  type="text"
+                  placeholder="Search logs..."
+                  className="
+                    pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-white/[0.1]"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+            </div>
             <div className="max-w-full overflow-x-auto relative">
-                <Table className="min-w-full border-collapse table-auto">
-                  <TableHeader className="sticky top-0 z-30 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-[#1C1C1E] dark:via-[#2A2A2C] dark:to-[#111113] border-b border-gray-200 dark:border-white/[0.1]">
-                    <TableRow className="divide-x divide-gray-200 dark:divide-white/[0.05]">
-                      {headers?.map((header, index) => {
-                        let stickyClasses = "";
-                        if (index === 0)
-                          stickyClasses =
-                            "sticky left-0 z-40 w-[80px] shadow-[2px_0_6px_-3px_rgba(0,0,0,0.1)]";
-                        else if (index === 1)
-                          stickyClasses =
-                            "sticky left-[80px] z-40 w-[250px] shadow-[2px_0_6px_-3px_rgba(0,0,0,0.1)]";
-                        else if (index === 9)
-                          stickyClasses =
-                            "sticky right-0 z-40 w-[200px] shadow-[-2px_0_6px_-3px_rgba(0,0,0,0.1)]";
+              <Table className="min-w-full border-collapse table-auto">
+                {/* Table Header */}
+                <TableHeader className="sticky top-0 z-30 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-[#1C1C1E] dark:via-[#2A2A2C] dark:to-[#111113] border-b border-gray-200 dark:border-white/[0.1]">
+                  <TableRow className="divide-x divide-gray-200 dark:divide-white/[0.05]">
+                    {headers.map((header) => (
+                      <TableCell
+                        key={header}
+                        isHeader
+                        className="sticky left-0 z-40 w-[300px] px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide
+                          bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50
+                          dark:from-[#1C1C1E] dark:via-[#2A2A2C] dark:to-[#111113]"
+                      >
+                        {header}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHeader>
 
-                        return (
-                          <TableCell
-                            key={header}
-                            isHeader
-                            className={`px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-[#1C1C1E] dark:via-[#2A2A2C] dark:to-[#111113] ${stickyClasses}`}
-                          >
-                            {header}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  </TableHeader>
-
-                  {/* Table Body */}
-                  <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                    {logsList?.length > 0 ? (
-                      logsList.map((q: Log) => (
-                          <TableRow
-                            key={q.id}
-                            className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
-                          >
-                            {/* Sticky ID */}
-                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                {q.description}
-                            </TableCell>
-                            {/* Sticky Actions */}
-                          </TableRow>
-                        ))
-                    ) : (
-                      <tr>
-                        <td colSpan={10}>
-                          <p className="text-gray-500 p-6 text-center">
-                            No Logs found.
+                {/* Table Body */}
+                <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  {logsList?.items?.length > 0 ? (
+                    logsList.items.map((log: Log) => (
+                      <TableRow
+                        key={log.id}
+                        className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
+                      >
+                        <TableCell
+                          className="
+                            sticky left-0 z-20 bg-white dark:bg-gray-900
+                            group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                            px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                          "
+                        >
+                          <p className="line-clamp-3 whitespace-normal">
+                            {log.description}
                           </p>
-                        </td>
-                      </tr>
-                    )}
-                  </TableBody>
-                </Table>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={10}>
+                        <p className="text-gray-500 p-6 text-center">
+                          No Logs found.
+                        </p>
+                      </td>
+                    </tr>
+                  )}
+                </TableBody>
+              </Table>
             </div>
           </div>
+
+          {/* Pagination Component */}
+          <Pagination
+            page={logsList.page}
+            totalPages={logsList.total_pages}
+            onPageChange={handlePageChange}
+          />
         </ComponentCard>
       </div>
     </div>

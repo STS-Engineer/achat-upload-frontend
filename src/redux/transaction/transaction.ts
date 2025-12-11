@@ -1,12 +1,12 @@
 import axiosInstance from "../../services/axiosInstance";
-import { addTransactionFailure, addTransactionRequest, addTransactionSuccess, getTransactionsFailure, getTransactionsRequest, getTransactionsSuccess } from "./transaction-slice";
-import { AddTransaction, GetTransactions } from "./transaction-types";
+import { addTransactionFailure, addTransactionRequest, addTransactionSuccess, getTransactionsFailure, getTransactionsRequest, getTransactionsSuccess, sendEmailFailure, sendEmailRequest, sendEmailSuccess } from "./transaction-slice";
+import { AddTransaction, GetTransactions, SendEmailTransaction } from "./transaction-types";
 
 
 
-export const getTransactions: GetTransactions = async (dispatch) => {
+export const getTransactions: GetTransactions = async (page, per_page, dispatch) => {
   dispatch(getTransactionsRequest());
-  const url = `/transaction/all`;
+  const url = `/transaction/all?page=${page}&per_page=${per_page}`;
 
   try {
     let response = await axiosInstance.get(url);
@@ -29,6 +29,19 @@ export const addTransaction: AddTransaction = async (data, dispatch) => {
     return true;
   } catch (error: any) {
     dispatch(addTransactionFailure(error.response?.data));
+    return false;
+  }
+};
+
+export const sendEmailTransaction: SendEmailTransaction = async (data, dispatch) => {
+  dispatch(sendEmailRequest());
+  try {
+    const response = await axiosInstance.post("/transaction/send-email", data);
+
+    dispatch(sendEmailSuccess(response.data));
+    return true;
+  } catch (error: any) {
+    dispatch(sendEmailFailure(error.response?.data));
     return false;
   }
 };

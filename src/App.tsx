@@ -19,7 +19,7 @@ export default function App() {
        
         <Routes>
           <Route element={<AppLayout />}>
-            <Route path="/achats" element={<Achat />} />
+            <Route path="/" element={<Achat />} />
             <Route path="/upload-achat" element={<UploadAchat />} />
 
             <Route path="/fournisseurs" element={<Fournisseur />} />

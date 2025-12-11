@@ -3,9 +3,9 @@ import { addFournisseurFailure, addFournisseurRequest, addFournisseurSuccess, ge
 import { AddFournisseur, GetFournisseurs } from "./fournisseur-types";
 
 
-export const getFournisseurs: GetFournisseurs = async (dispatch) => {
+export const getFournisseurs: GetFournisseurs = async (page, per_page, dispatch) => {
   dispatch(getFournisseursRequest());
-  const url = `/fournisseur/all`;
+  const url = `/fournisseur/all?page=${page}&per_page=${per_page}`;
 
   try {
     let response = await axiosInstance.get(url);
