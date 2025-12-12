@@ -10,14 +10,11 @@ export interface Achatstate {
 
 export interface Achat {
     id: number;
-    date: string;
-    taille: number;
-    prix: number;
+    mvt_date: string;
     reference: string;
-    plant: string;
+    description: string;
     quantite: number;
-    responsable_plant: string;
-
+    prix: number;
     fournisseur_id: number;
     fournisseur?: Fournisseur
 }

@@ -8,4 +8,9 @@ export interface Logstate {
 export interface Log {
     id: number;
     description: string;
+    problem_type: string;
+    document: {
+        id: number;
+        filename: string;
+    }
 }

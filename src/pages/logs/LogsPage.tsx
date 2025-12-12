@@ -10,11 +10,12 @@ import {
 } from "../../components/ui/table";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLogs } from "../../redux/logs/logs";
+import { extractExcel, getLogs } from "../../redux/logs/logs";
 import { Log } from "../../redux/logs/logs-slice-types";
 import Pagination from "../../components/common/Pagination";
 import Input from "../../components/form/input/InputField";
 import { SearchCheck } from "lucide-react";
+import { DownloadIcon } from "../../icons";
 
 export default function FormElements() {
   const dispatch = useDispatch();
@@ -26,7 +27,15 @@ export default function FormElements() {
 
   const { logsList } = useSelector((state: any) => state.log);
 
-  const headers = ["description"];
+  const headers = ["Problem Type", "Description", "File Name"];
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleDownload = () => {
+    extractExcel(dispatch)
+  }
 
   useEffect(() => {
     getLogs(page, per_page, "", dispatch);
@@ -38,10 +47,6 @@ export default function FormElements() {
     }
   }, [description, page, dispatch]);
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-  };
-
   return (
     <div className="p-6 space-y-8">
       <PageMeta title="Logs" description="..." />
@@ -51,7 +56,22 @@ export default function FormElements() {
         <ComponentCard title="Logs List">
           <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/[0.05] bg-white dark:bg-gray-900 shadow-lg">
             <div className="flex justify-end w-full px-4 py-3">
-              <div className="relative w-full sm:w-[280px]">
+              <div className="flex items-center gap-3">
+                 <button
+                    className="
+                      flex items-center justify-center
+                      h-10 w-10
+                      rounded-lg border border-gray-300
+                      dark:border-white/[0.1]
+                      hover:bg-gray-100 dark:hover:bg-white/[0.05]
+                      transition
+                    "
+                    title="Download logs"
+                    onClick={handleDownload}
+                  >
+                    <DownloadIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                  </button>
+                <div className="relative w-full sm:w-[280px]">
                 <SearchCheck 
                   className="absolute top-1/2 -translate-y-1/2 left-3 w-5 h-5"
                 />
@@ -62,6 +82,7 @@ export default function FormElements() {
                     pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-white/[0.1]"
                   onChange={(e) => setDescription(e.target.value)}
                 />
+              </div>
               </div>
             </div>
             <div className="max-w-full overflow-x-auto relative">
@@ -99,7 +120,29 @@ export default function FormElements() {
                           "
                         >
                           <p className="line-clamp-3 whitespace-normal">
+                            {log.problem_type}
+                          </p>
+                        </TableCell>
+                        <TableCell
+                          className="
+                            sticky left-0 z-20 bg-white dark:bg-gray-900
+                            group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                            px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                          "
+                        >
+                          <p className="line-clamp-3 whitespace-normal">
                             {log.description}
+                          </p>
+                        </TableCell>
+                        <TableCell
+                          className="
+                            sticky left-0 z-20 bg-white dark:bg-gray-900
+                            group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                            px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                          "
+                        >
+                          <p className="line-clamp-3 whitespace-normal">
+                            {log.document.filename}
                           </p>
                         </TableCell>
                       </TableRow>

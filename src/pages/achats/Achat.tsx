@@ -20,7 +20,7 @@ export default function FormElements() {
   const dispatch = useDispatch();
   const { achatsList } = useSelector((state: any) => state.achat);
   
-  const headers = ["reference", "supplier", "manager", "plant", "upload date", 'quantity', 'price', "size"];
+  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier"];
 
   const handleClick = () => {
     navigate("/upload-achat");
@@ -86,37 +86,26 @@ export default function FormElements() {
                             key={q.id}
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
                           >
-                            {/* Sticky ID */}
+                            <TableCell className="sticky left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                {q.mvt_date}
+                            </TableCell>
                             <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.reference}
+                            </TableCell>
+                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                {q.description}
+                            </TableCell>
+                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                {q.quantite}
+                            </TableCell>
+                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                {q.prix}
                             </TableCell>
 
                             {/* Sticky Name */}
                             <TableCell className="sticky left-[80px] z-20 w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
                                {q.fournisseur?.name}
                             </TableCell>
-
-                            {/* Normal Columns */}
-                            <TableCell className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                              {q.responsable_plant}
-                            </TableCell>
-                            <TableCell className="px-4 py-2 text-sm">
-                              {q.plant}
-                            </TableCell>
-                            <TableCell className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                              {q.date}
-                            </TableCell>
-                            <TableCell className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                              {q.quantite}
-                            </TableCell>
-                            <TableCell className="px-6 py-3 text-sm font-medium text-gray-800 dark:text-white">
-                              {q.prix}
-                            </TableCell>
-                            <TableCell className="px-6 py-3 text-sm font-medium text-gray-800 dark:text-white">
-                              {q.taille}
-                            </TableCell>
-
-                            {/* Sticky Actions */}
                           </TableRow>
                         ))
                     ) : (

@@ -1,6 +1,6 @@
 import axiosInstance from "../../services/axiosInstance";
-import { getLogsFailure, getLogsRequest, getLogsSuccess } from "./logs-slice";
-import { GetLogs } from "./logs-types";
+import { extractExcelDataFailure, extractExcelDataRequest, extractExcelDataSuccess, getLogsFailure, getLogsRequest, getLogsSuccess } from "./logs-slice";
+import { ExtractExcel, GetLogs } from "./logs-types";
 
 
 export const getLogs: GetLogs = async (page, per_page, description, dispatch) => {
@@ -17,4 +17,43 @@ export const getLogs: GetLogs = async (page, per_page, description, dispatch) =>
   }
 
   return false;
+};
+
+export const extractExcel: ExtractExcel = async (dispatch) => {
+  dispatch(extractExcelDataRequest());
+
+  const apiUrl = "/logs/export";
+
+  try {
+    const response = await axiosInstance.post(
+      apiUrl,
+      {},
+      {
+        responseType: "blob",
+        headers: {
+          "Content-Type":
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = "logs_export.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(blobUrl);
+
+    dispatch(extractExcelDataSuccess());
+    return true;
+  } catch (error) {
+    dispatch(extractExcelDataFailure());
+    return false;
+  }
 };

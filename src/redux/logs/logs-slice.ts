@@ -25,6 +25,20 @@ const Logslice = createSlice({
     getLogsFailure(state) {
       state.success = false;
       state.error = true;
+    },
+    extractExcelDataRequest(state) {
+      state.success = false;
+      state.error = false;
+    },
+    extractExcelDataSuccess(state) {
+      state.success = true;
+      state.error = false;
+      state.toast = 'excel generated successfully';
+    },
+    extractExcelDataFailure(state) {
+      state.success = false;
+      state.error = true;
+      state.toast = 'error extracting excel data';
     }
   }
 })
@@ -33,6 +47,9 @@ export const {
     getLogsRequest,
     getLogsSuccess,
     getLogsFailure,
+    extractExcelDataRequest,
+    extractExcelDataSuccess,
+    extractExcelDataFailure
 } = Logslice.actions;
 
 export default Logslice.reducer;

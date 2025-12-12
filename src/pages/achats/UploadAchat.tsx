@@ -36,7 +36,6 @@ export default function FrameworkElements() {
     }, 1500);
   }, [toast, navigate]);
 
-
   return (
     <div className="p-8 space-y-16">
       <PageMeta title="Upload purchase" description="" />

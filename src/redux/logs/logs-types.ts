@@ -7,5 +7,10 @@ export type GetLogs = (
   dispatch: Dispatch<any>
 ) => Promise<boolean>;
 
+export type ExtractExcel = (
+    dispatch: Dispatch<any>
+) => Promise<boolean>;
+
+
 
 
