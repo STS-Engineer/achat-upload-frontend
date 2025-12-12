@@ -51,7 +51,7 @@ const Transactionslice = createSlice({
       state.error = false;
     },
     sendEmailSuccess(state) {
-      state.toast = 'Email envoyé avec succès';
+      state.toast = 'Email sent successfully';
       state.success = true;
       state.error = false;
     },

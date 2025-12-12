@@ -31,12 +31,12 @@ const Achatslice = createSlice({
       state.error = false;
     },
     uploadExcelFileSuccess(state) {
-      state.toast = 'Fichier uploadé avec succès';
+      state.toast = 'File uploaded successfully';
       state.success = true;
       state.error = false;
     },
     uploadExcelFileFailure(state) {
-      state.toast = "Erreur lors de l'upload du fichier";
+      state.toast = "Error uploading file";
       state.success = false;
       state.error = true;
     }

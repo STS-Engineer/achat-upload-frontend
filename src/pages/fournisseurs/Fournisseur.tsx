@@ -56,20 +56,20 @@ export default function FournisseursElements() {
 
   return (
     <div className="p-8 space-y-16">
-      <PageMeta title="Fournisseur Management" description="" />
-      <PageBreadcrumb pageTitle="Fournisseurs" />
+      <PageMeta title="supplier Management" description="" />
+      <PageBreadcrumb pageTitle="supplier" />
 
       <section className="space-y-6">
         <div className="flex items-center justify-between ">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-            Fournisseurs
+              supplier List
           </h2>
         </div>
 
         {/* Empty State */}
         {fournisseursList.items?.length === 0 && (
           <div className="p-6 border rounded-2xl bg-gray-50 dark:bg-gray-900/20 text-center">
-            <p className="text-gray-500 dark:text-gray-400">No fournisseurs found.</p>
+            <p className="text-gray-500 dark:text-gray-400">No suppliers found.</p>
           </div>
         )}
 
@@ -108,7 +108,7 @@ export default function FournisseursElements() {
       {/* Add Fournisseur Form */}
       <section className="grid grid-cols-1 gap-12 mt-10">
         <Panel
-          title="Add Fournisseur"
+          title="Add supplier"
           className="bg-gradient-to-br from-orange-50 via-orange-100 to-orange-50  
             dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"
         >

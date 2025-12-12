@@ -25,12 +25,12 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    name: "achats",
+    name: "purchase",
     icon: <BookCheck className="w-5 h-5" />,
     path: "/",
   },
   {
-    name: "fournisseurs",
+    name: "suppliers",
     icon: <ListChecks className="w-5 h-5" />,
     path: "/fournisseurs",
   },

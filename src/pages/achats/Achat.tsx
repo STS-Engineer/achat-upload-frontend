@@ -20,7 +20,7 @@ export default function FormElements() {
   const dispatch = useDispatch();
   const { achatsList } = useSelector((state: any) => state.achat);
   
-  const headers = ["référence", "fournisseur", "responsable", "plant", "date de l'upload", 'quantité', 'prix', "taille"];
+  const headers = ["reference", "supplier", "manager", "plant", "upload date", 'quantity', 'price', "size"];
 
   const handleClick = () => {
     navigate("/upload-achat");
@@ -36,18 +36,18 @@ export default function FormElements() {
 
   return (
     <div className="p-6 space-y-8">
-      <PageMeta title="Achat" description="..." />
-      <PageBreadcrumb pageTitle="Achat" />
+      <PageMeta title="purchase" description="..." />
+      <PageBreadcrumb pageTitle="purchase" />
       <div className="space-y-6">
         <div className="flex justify-end gap-2">
           <button
             onClick={handleClick}
             className="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition"
           >
-            Importer fichier Achat
+            Import file purchase
           </button>
         </div>
-        <ComponentCard title="Achats List">
+        <ComponentCard title="purchase List">
           <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/[0.05] bg-white dark:bg-gray-900 shadow-lg">
             <div className="max-w-full overflow-x-auto relative">
                 <Table className="min-w-full border-collapse table-auto">
@@ -123,7 +123,7 @@ export default function FormElements() {
                       <tr>
                         <td colSpan={10}>
                           <p className="text-gray-500 p-6 text-center">
-                            No achats found.
+                            No purchase found.
                           </p>
                         </td>
                       </tr>

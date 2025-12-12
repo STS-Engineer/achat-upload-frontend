@@ -32,7 +32,7 @@ const Fournisseurslice = createSlice({
     },
     addFournisseurSuccess(state, action) {
       state.fournisseursList?.items.push(action.payload);
-      state.toast = 'Fournisseur ajouté avec succès';
+      state.toast = 'Supplier added successfully';
       state.success = true;
       state.error = false;
     },
