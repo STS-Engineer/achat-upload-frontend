@@ -34,8 +34,8 @@ const Achatslice = createSlice({
       state.success = true;
       state.error = false;
     },
-    uploadExcelFileFailure(state, action) {
-      state.toast = action.payload.detail;
+    uploadExcelFileFailure(state) {
+      state.toast = 'something went wrong';
       state.success = false;
       state.error = true;
     },
@@ -75,6 +75,9 @@ const Achatslice = createSlice({
       state.toast = action.payload.detail;
       state.success = false;
       state.error = true;
+    },
+    clearToast(state) {
+      state.toast = '';
     }
   }
 })
@@ -91,7 +94,8 @@ export const {
     updateAchatFailure,
     deleteAchatRequest,
     deleteAchatSuccess,
-    deleteAchatFailure
+    deleteAchatFailure,
+    clearToast
 } = Achatslice.actions;
 
 export default Achatslice.reducer;

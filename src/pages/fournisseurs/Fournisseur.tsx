@@ -8,12 +8,12 @@ import Panel from "../../components/form/panel";
 import { Label } from "recharts";
 import Input from "../../components/form/input/InputField";
 import Button from "../../components/ui/button/Button";
-import Alert from "../../components/ui/alert/Alert";
 import Pagination from "../../components/common/Pagination";
 import { resetFournisseurState } from "../../redux/fournisseurs/fournisseur-slice";
 import { Modal } from "../../components/ui/modal";
 import ConfirmDialog from "../../components/form/ConfirmDialogProps";
 import { BadgeMinusIcon, SettingsIcon } from "lucide-react";
+import useToast from "../../hooks/useToast";
 
 export default function FournisseursElements() {
    const dispatch = useDispatch();
@@ -61,6 +61,7 @@ export default function FournisseursElements() {
       e.preventDefault();
       if (!selectedFournisseur) return;
       updateFournisseur(selectedFournisseur.id, formFournisseur, dispatch );
+      closeModal();
   }
 
   const handleConfirmDelete = () => {
@@ -77,26 +78,27 @@ export default function FournisseursElements() {
     }));
   }
 
-  // Load data when page changes
   useEffect(() => {
     getFournisseurs(dispatch, page, per_page);
   }, [dispatch, page]);
 
   useEffect(() => {
-      setTimeout(() => {
-        if (toast) 
-          {
-            dispatch(resetFournisseurState());
-            setFormFournisseur({
-              name: "",
-              email: "",
-            });
-            if (isOpen) {
-              setIsOpen(false);
-            }
+    setTimeout(() => {
+      if (toast) 
+        {
+          dispatch(resetFournisseurState());
+          setFormFournisseur({
+            name: "",
+            email: "",
+          });
+          if (isOpen) {
+            setIsOpen(false);
           }
-      }, 1500);
-    }, [dispatch, toast]);
+        }
+    }, 1500);
+  }, [dispatch, toast]);
+
+  useToast();
 
   return (
     <div className="p-8 space-y-16">
@@ -230,16 +232,6 @@ export default function FournisseursElements() {
             >
               Add
             </Button>
-
-            {toast && (
-              <Alert
-                title={toast}
-                message=""
-                variant={
-                  toast === "fournisseur already registered" ? "error" : "success"
-                }
-              />
-            )}
           </form>
         </Panel>
       </section>

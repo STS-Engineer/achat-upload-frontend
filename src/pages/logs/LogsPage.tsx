@@ -16,6 +16,7 @@ import Pagination from "../../components/common/Pagination";
 import Input from "../../components/form/input/InputField";
 import { SearchCheck } from "lucide-react";
 import { DownloadIcon } from "../../icons";
+import useToast from "../../hooks/useToast";
 
 export default function FormElements() {
   const dispatch = useDispatch();
@@ -42,10 +43,12 @@ export default function FormElements() {
   }, [dispatch, page]);
 
   useEffect(() => {
-    if (description && description.length > 3) {
+    if ((description && description.length > 3) || description.length === 0) {
       getLogs(page, per_page, description, dispatch);
     }
   }, [description, page, dispatch]);
+
+  useToast();
 
   return (
     <div className="p-6 space-y-8">

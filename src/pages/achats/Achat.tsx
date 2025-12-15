@@ -23,6 +23,7 @@ import Button from "../../components/ui/button/Button";
 import TextArea from "../../components/form/input/TextArea";
 import Select from "../../components/form/Select";
 import Enum from "../../components/enum/Enum";
+import useToast from "../../hooks/useToast";
 
 export default function FormElements() {
   const navigate = useNavigate();
@@ -92,6 +93,8 @@ export default function FormElements() {
       setFormAchat(selectedAchat);
     }
   }, [selectedAchat]);
+
+  useToast();
 
   return (
     <div className="p-6 space-y-8">

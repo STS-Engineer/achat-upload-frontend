@@ -5,15 +5,15 @@ import Panel from "../../components/form/panel";
 import { Label } from "recharts";
 import Button from "../../components/ui/button/Button";
 import FileInput from "../../components/form/input/FileInput";
-import Alert from "../../components/ui/alert/Alert";
 import { useEffect, useState } from "react";
 import { uploadExcel } from "../../redux/achats/achat";
 import { useNavigate } from "react-router";
+import useToast from "../../hooks/useToast";
 
 export default function FrameworkElements() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { toast } = useSelector((state: any) => state.achat);
+  const { toast: toastMessage } = useSelector((state: any) => state.achat);
   const [file, setFile] = useState<File | null>(null);
 
   const handleUploadExcel = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,11 +30,13 @@ export default function FrameworkElements() {
 
   useEffect(() => {
     setTimeout(() => {
-        if (toast === "File uploaded successfully") {
+        if (toastMessage === "File uploaded successfully") {
             navigate("/");
         }
     }, 1500);
-  }, [toast, navigate]);
+  }, [toastMessage, navigate]);
+
+  useToast();
 
   return (
     <div className="p-8 space-y-16">
@@ -57,13 +59,6 @@ export default function FrameworkElements() {
                 >
                     Upload
                 </Button>
-                { toast && (
-                <Alert
-                    title={toast}
-                    message=""
-                    variant={ toast === "File uploaded successfully" ? "success" : "error" }
-                />
-                )}
             </form>
         </Panel>
       </section>
