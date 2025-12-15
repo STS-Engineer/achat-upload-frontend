@@ -35,11 +35,6 @@ const navItems: NavItem[] = [
     path: "/fournisseurs",
   },
   {
-    name: "transactions",
-    icon: <TableIcon />,
-    path: "/transactions",
-  },
-  {
     name: "logs",
     icon: <TableIcon />,
     path: "/logs",

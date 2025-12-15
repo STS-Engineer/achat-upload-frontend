@@ -6,7 +6,6 @@ import toast, { ToastBar, Toaster } from "react-hot-toast";
 import Achat from "./pages/achats/Achat";
 import UploadAchat from "./pages/achats/UploadAchat";
 import Fournisseur from "./pages/fournisseurs/Fournisseur";
-import Transaction from "./pages/transaction/Transaction";
 import LogsPage from "./pages/logs/LogsPage";
 import SignIn from "./pages/auth/SignIn";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -74,7 +73,6 @@ export default function App() {
               <Route path="/" element={<Achat />} />
               <Route path="/upload-achat" element={<UploadAchat />} />
               <Route path="/fournisseurs" element={<Fournisseur />} />
-              <Route path="/transactions" element={<Transaction />} />
               <Route path="/logs" element={<LogsPage />} />
               <Route path="/profile" element={<UserProfiles />} />
             </Route>
