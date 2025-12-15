@@ -1,6 +1,6 @@
 import axiosInstance from "../../services/axiosInstance";
-import { addFournisseurFailure, addFournisseurRequest, addFournisseurSuccess, getFournisseursFailure, getFournisseursRequest, getFournisseursSuccess } from "./fournisseur-slice";
-import { AddFournisseur, GetFournisseurs } from "./fournisseur-types";
+import { addFournisseurFailure, addFournisseurRequest, addFournisseurSuccess, deleteFournisseurFailure, deleteFournisseurRequest, deleteFournisseurSuccess, getFournisseursFailure, getFournisseursRequest, getFournisseursSuccess, updateFournisseurFailure, updateFournisseurRequest, updateFournisseurSuccess } from "./fournisseur-slice";
+import { AddFournisseur, GetFournisseurs, UpdateFournisseur } from "./fournisseur-types";
 
 
 export const getFournisseurs: GetFournisseurs = async (page, per_page, dispatch) => {
@@ -28,6 +28,32 @@ export const addFournisseur: AddFournisseur = async (data, dispatch) => {
     return true;
   } catch (error: any) {
     dispatch(addFournisseurFailure(error.response?.data));
+    return false;
+  }
+};
+
+export const updateFournisseur: UpdateFournisseur = async (fournisseur_id, data, dispatch) => {
+  dispatch(updateFournisseurRequest());
+  try {
+    const response = await axiosInstance.put(`/fournisseur/update/${fournisseur_id}`, data);
+
+    dispatch(updateFournisseurSuccess(response.data));
+    return true;
+  } catch (error: any) {
+    dispatch(updateFournisseurFailure(error.response?.data));
+    return false;
+  }
+};
+
+export const deleteFournisseur = async (fournisseur_id: number, dispatch: any) => {
+  dispatch(deleteFournisseurRequest());
+  try {
+    const response = await axiosInstance.delete(`/fournisseur/delete/${fournisseur_id}`);
+
+    dispatch(deleteFournisseurSuccess(response.data));
+    return true;
+  } catch (error: any) {
+    dispatch(deleteFournisseurFailure(error.response?.data));
     return false;
   }
 };

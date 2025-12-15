@@ -4,7 +4,7 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link, useNavigate } from "react-router";
 import { logUserOut, me } from "../../redux/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../../../public/images/logo/avocarbon.png";
+import avatar from "../../../public/images/logo/avatar.jpg";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,13 +33,28 @@ export default function UserDropdown() {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
+        className="flex items-center gap-3 text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img src={logo} alt="User" />
+        <div className="w-11 h-11 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
+          {user?.document ? (
+            <img
+              src={`${import.meta.env.VITE_API_URL}/uploads/profiles/${user?.document}`}
+              alt="user"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={avatar}
+              alt="user"
+              className="w-full h-full object-cover"
+            />
+          )}
+        </div>
+
+        <span className="block font-medium text-theme-sm">
+          {user?.first_name} {user?.last_name}
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">{user?.first_name} {user?.last_name}</span>
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -48,7 +63,6 @@ export default function UserDropdown() {
           height="20"
           viewBox="0 0 18 20"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
@@ -59,6 +73,7 @@ export default function UserDropdown() {
           />
         </svg>
       </button>
+
 
       <Dropdown
         isOpen={isOpen}

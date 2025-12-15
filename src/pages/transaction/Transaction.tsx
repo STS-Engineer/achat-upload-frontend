@@ -6,12 +6,10 @@ import { Transaction } from "../../redux/transaction/transaction-slice-types";
 import Panel from "../../components/form/panel";
 import { Label } from "recharts";
 import Input from "../../components/form/input/InputField";
-import DatePicker from "../../components/form/date-picker";
 import Button from "../../components/ui/button/Button";
 import Alert from "../../components/ui/alert/Alert";
-import { addTransaction, getTransactions, sendEmailTransaction } from "../../redux/transaction/transaction";
+import { addTransaction, getTransactions } from "../../redux/transaction/transaction";
 import { resetTransactionState } from "../../redux/transaction/transaction-slice";
-import { MailIcon } from "../../icons";
 import Pagination from "../../components/common/Pagination";
 
 export default function FrameworkElements() {
@@ -29,24 +27,9 @@ export default function FrameworkElements() {
     date_limite: "",
   });
 
-  const [clickedButtons, setClickedButtons] = useState<{ [key: number]: boolean }>({});
-
   const handleAddFournisseur = (e: React.FormEvent) => {
     e.preventDefault();
-    const adjustedFormTransaction = {
-      ...formTransaction,
-      date_limite: new Date(formTransaction.date_limite).toISOString(),
-    };
-    addTransaction(adjustedFormTransaction, dispatch);
-  };
-
-  const handleSendEmail = (transaction: Transaction) => {
-    setClickedButtons((prev) => ({
-      ...prev,
-      [transaction.id]: true,
-    }));
-
-    sendEmailTransaction(transaction, dispatch);
+    addTransaction(formTransaction, dispatch);
   };
 
   // Fetch transactions on load & when page changes
@@ -96,36 +79,12 @@ export default function FrameworkElements() {
               flex flex-col justify-between hover:shadow-md transition bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100
               dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"
             >
-              {new Date() > new Date(f.date_limite) && (
-                <button
-                  type="button"
-                  disabled={clickedButtons[f.id]}
-                  className="
-                    absolute top-3 right-3 p-2 rounded-full transition
-                    bg-blue-100 hover:bg-blue-200
-                    dark:bg-blue-900/40 dark:hover:bg-blue-900
-                    disabled:bg-gray-300 disabled:cursor-not-allowed
-                    dark:disabled:bg-gray-700"
-                  onClick={() => handleSendEmail(f)}
-                >
-                  <MailIcon
-                    className="
-                      w-4 h-4 
-                      text-blue-700 dark:text-blue-300
-                      disabled:text-gray-500"
-                  />
-                </button>
-              )}
-
               <div className="space-y-1">
                 <h3 className="text-md font-normal text-gray-800 dark:text-gray-100">
                   {f.responsable_name}
                 </h3>
                 <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">
                   {f.responsable_email}
-                </span>
-                <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-red-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">
-                  {new Date(f.date_limite).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -170,18 +129,6 @@ export default function FrameworkElements() {
                 name="responsable_email"
               />
             </div>
-
-            <div>
-              <Label>Date limite</Label>
-              <DatePicker
-                id="date_limite"
-                placeholder="Select date"
-                value={formTransaction.date_limite}
-                onChange={(date: string) => setFormTransaction({ ...formTransaction, date_limite: date })}
-                name="date_limite"
-              />
-            </div>
-
             <Button className="px-4 py-2 rounded-lg text-white font-medium transition bg-gradient-to-r from-[#F68C1F] to-[#EF7807] hover:from-[#F78F3F] hover:to-[#F47A07] dark:from-[#B55A00] dark:to-[#8A4600]">
               Add
             </Button>

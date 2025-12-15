@@ -14,4 +14,15 @@ export interface User {
     last_name: string;
     email: string;
     active: boolean;
+    manager: Manager;
+    document: string;
+    manager_id: number;
+    document_id: number;
+}
+
+export interface Manager {
+    id: number;
+    name: string;
+    manager: string;
+    manager_email: string;
 }

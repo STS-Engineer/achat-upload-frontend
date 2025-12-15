@@ -86,6 +86,33 @@ const authSlice = createSlice({
       state.user = null;
       state.success = false;
       state.error = true;
+    },
+    uploadProfileImageRequest(state) {
+      state.error = false;
+      state.success = false;
+    },
+    uploadProfileImageSuccess(state, action) {
+      state.user = action.payload;
+      state.success = true;
+      state.error = false;
+    },
+    uploadProfileImageFailure(state) {
+      state.success = false;
+      state.error = true;
+    },
+    updateUserRequest(state) {
+      state.error = false;
+      state.success = false;
+    },
+    updateUserSuccess(state, action) {
+      state.user = action.payload;
+      state.success = true;
+      state.error = false;
+      state.toast = "User updated successfully";
+    },
+    updateUserFailure(state) {
+      state.success = false;
+      state.error = true;
     }
   }
 });
@@ -102,7 +129,13 @@ export const {
   resetPasswordFailure,
   meRequest,
   meSuccess,
-  meFailure
+  meFailure,
+  uploadProfileImageRequest,
+  uploadProfileImageSuccess,
+  uploadProfileImageFailure,
+  updateUserRequest,
+  updateUserSuccess,
+  updateUserFailure
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -104,7 +104,7 @@ export default function FormElements() {
 
                             {/* Sticky Name */}
                             <TableCell className="sticky left-[80px] z-20 w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
-                               {q.fournisseur?.name}
+                               {q.fournisseur?.name || 'N/A'}
                             </TableCell>
                           </TableRow>
                         ))

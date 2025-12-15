@@ -8,5 +8,5 @@ export interface Fournisseurstate {
 export interface Fournisseur {
     id: number;
     name: string;
-    email?: string;
+    email: string;
 }

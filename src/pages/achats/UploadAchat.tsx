@@ -30,7 +30,7 @@ export default function FrameworkElements() {
 
   useEffect(() => {
     setTimeout(() => {
-        if (toast === "Fichier uploadé avec succès") {
+        if (toast === "File uploaded successfully") {
             navigate("/");
         }
     }, 1500);

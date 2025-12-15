@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Fournisseurstate } from "./fournisseur-slice-types";
+import { Fournisseur, Fournisseurstate } from "./fournisseur-slice-types";
 
 
 const initialState : Fournisseurstate    = {
@@ -45,6 +45,43 @@ const Fournisseurslice = createSlice({
       state.toast = '';
       state.success = false;
       state.error = false;
+    },
+    updateFournisseurRequest(state) {
+      state.success = false;
+      state.error = false;
+    },
+    updateFournisseurSuccess(state, action) {
+      const index = state.fournisseursList.items.findIndex(
+        (fournisseur: Fournisseur) => fournisseur.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.fournisseursList.items[index] = action.payload;
+      }
+      state.toast = 'Supplier updated successfully';
+      state.success = true;
+      state.error = false;
+    },
+    updateFournisseurFailure(state, action) {
+      state.toast = action.payload.detail;
+      state.success = false;
+      state.error = true;
+    },
+    deleteFournisseurRequest(state) {
+      state.success = false;
+      state.error = false;
+    },
+    deleteFournisseurSuccess(state, action) {
+      state.fournisseursList.items = state.fournisseursList.items.filter(
+        (fournisseur: Fournisseur) => fournisseur.id !== action.payload.id
+      );
+      state.toast = 'Supplier deleted successfully';
+      state.success = true;
+      state.error = false;
+    },
+    deleteFournisseurFailure(state, action) {
+      state.toast = action.payload.detail;
+      state.success = false;
+      state.error = true;
     }
   }
 })
@@ -56,7 +93,13 @@ export const {
     addFournisseurRequest,
     addFournisseurSuccess,
     addFournisseurFailure,
-    resetFournisseurState
+    resetFournisseurState,
+    updateFournisseurRequest,
+    updateFournisseurSuccess,
+    updateFournisseurFailure,
+    deleteFournisseurRequest,
+    deleteFournisseurSuccess,
+    deleteFournisseurFailure
 } = Fournisseurslice.actions;
 
 export default Fournisseurslice.reducer;
