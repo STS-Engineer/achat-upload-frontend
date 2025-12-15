@@ -3,26 +3,52 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
-import { User } from "../../redux/auth/auth-slice-types";
+import { User, UserUpdate } from "../../redux/auth/auth-slice-types";
 import { SettingsIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "../form/Select";
+import Enum from "../enum/Enum";
+import { updateUser } from "../../redux/auth/auth";
+import { useDispatch } from "react-redux";
 
 export default function UserInfoCard({ user } : { user: User }) {
+  const dispatch = useDispatch();
   const { isOpen, openModal, closeModal } = useModal();
-  const [formUser, setFormUser] = useState<User>({
+  const [formUser, setFormUser] = useState<UserUpdate>({
+    id: user?.id,
     first_name: user?.first_name,
     last_name: user?.last_name,
     email: user?.email,
     manager_id: user?.manager_id,
-    document_id: user?.document_id,
   });
+  const { managerOptions } = Enum();
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
+  const handleSelectChange = (name: string, e: any) => {
+    setFormUser(prevState => ({
+      ...prevState,
+      [name]: e
+    }));
+  }
+
+  const handleUpdateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const adjustedUser = {
+      ...formUser,
+     manager_id:
+      typeof formUser.manager_id === "string"
+        ? Number(formUser.manager_id)
+        : formUser.manager_id ?? null,
+    };
+    
+    updateUser(formUser.id, adjustedUser, dispatch);
+
     closeModal();
   };
+
+  useEffect(() => {
+    setFormUser(user);
+  }, [user]);
+
   return (
     <div className="mt-7 bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -60,10 +86,10 @@ export default function UserInfoCard({ user } : { user: User }) {
             </div>
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Linked to Manager
+                Linked to Plant - Manager name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user?.manager ? `${user?.manager}` : "No Manager Assigned"}
+                { user?.plant_name ? `${user?.plant_name} - ${user?.manager}` : "No plant linked" }
               </p>
             </div>
           </div>
@@ -88,7 +114,7 @@ export default function UserInfoCard({ user } : { user: User }) {
               Update your details to keep your profile up-to-date.
             </p>
           </div>
-          <form className="flex flex-col">
+          <form className="flex flex-col" onSubmit={handleUpdateSubmit}>
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
@@ -102,7 +128,7 @@ export default function UserInfoCard({ user } : { user: User }) {
                       type="text"
                       id="first_name"
                       placeholder="nom"
-                      value={formUser.first_name}
+                      value={formUser?.first_name}
                       onChange={(e) =>
                         setFormUser({ ...formUser, first_name: e.target.value })
                       }
@@ -116,7 +142,7 @@ export default function UserInfoCard({ user } : { user: User }) {
                       type="text"
                       id="last_name"
                       placeholder="nom"
-                      value={formUser.last_name}
+                      value={formUser?.last_name}
                       onChange={(e) =>
                         setFormUser({ ...formUser, last_name: e.target.value })
                       }
@@ -130,7 +156,7 @@ export default function UserInfoCard({ user } : { user: User }) {
                       type="text"
                       id="email"
                       placeholder="nom"
-                      value={formUser.email}
+                      value={formUser?.email}
                       onChange={(e) =>
                         setFormUser({ ...formUser, email: e.target.value })
                       }
@@ -140,9 +166,13 @@ export default function UserInfoCard({ user } : { user: User }) {
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Managers</Label>
                     <Select
-                      id="manager_id"
-                      value={formUser.manager_id || ""}
-                      //onChange={(e) =>
+                      defaultValue={
+                        typeof formUser?.manager_id === "string"
+                          ? parseInt(formUser?.manager_id)
+                          : formUser?.manager_id || ""}
+                      options={managerOptions}
+                      placeholder="Select Manager"
+                      onChange={(e) => handleSelectChange("manager_id", e)}
                     />
                   </div>
                 </div>
@@ -152,7 +182,7 @@ export default function UserInfoCard({ user } : { user: User }) {
               <Button size="sm" variant="outline" onClick={closeModal}>
                 Close
               </Button>
-              <Button size="sm" onClick={handleSave}>
+              <Button size="sm">
                 Save Changes
               </Button>
             </div>

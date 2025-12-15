@@ -11,6 +11,17 @@ export type UploadExcelFile = (
   dispatch: Dispatch<any>
 ) => Promise<boolean>;
 
+export type UpdateAchat = (
+  id: number,
+  data: any,
+  dispatch: Dispatch<any>
+) => Promise<boolean>;
+
+export type DeleteAchat = (
+  id: number,
+  dispatch: Dispatch<any>
+) => Promise<boolean>;
+
 
 
 

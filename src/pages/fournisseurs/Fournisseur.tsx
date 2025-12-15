@@ -79,7 +79,7 @@ export default function FournisseursElements() {
 
   // Load data when page changes
   useEffect(() => {
-    getFournisseurs(page, per_page, dispatch);
+    getFournisseurs(dispatch, page, per_page);
   }, [dispatch, page]);
 
   useEffect(() => {

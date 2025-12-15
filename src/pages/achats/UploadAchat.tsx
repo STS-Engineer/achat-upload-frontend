@@ -61,7 +61,7 @@ export default function FrameworkElements() {
                 <Alert
                     title={toast}
                     message=""
-                    variant={ toast === "Erreur lors de l'upload du fichier" ? "error" : "success" }
+                    variant={ toast === "File uploaded successfully" ? "success" : "error" }
                 />
                 )}
             </form>

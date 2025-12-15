@@ -16,8 +16,9 @@ export interface User {
     active: boolean;
     manager: Manager;
     document: string;
-    manager_id: number;
+    manager_id: number | string;
     document_id: number;
+    plant_name?: string;
 }
 
 export interface Manager {
@@ -26,3 +27,12 @@ export interface Manager {
     manager: string;
     manager_email: string;
 }
+
+export interface UserUpdate {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  manager_id: number | string;
+}
+    

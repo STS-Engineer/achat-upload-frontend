@@ -1,9 +1,9 @@
 import { Dispatch } from "redux";
 
 export type GetFournisseurs = (
-  page: number,
-  per_page: number,
-  dispatch: Dispatch<any>
+  dispatch: Dispatch<any>,
+  page?: number,
+  per_page?: number,
 ) => Promise<boolean>;
 
 export type AddFournisseur = (

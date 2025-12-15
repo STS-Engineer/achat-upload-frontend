@@ -142,7 +142,7 @@ export default function FormElements() {
                           "
                         >
                           <p className="line-clamp-3 whitespace-normal">
-                            {log.document.filename}
+                            {log?.document?.filename}
                           </p>
                         </TableCell>
                       </TableRow>

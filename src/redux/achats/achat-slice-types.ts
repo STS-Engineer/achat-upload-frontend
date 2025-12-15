@@ -17,4 +17,14 @@ export interface Achat {
     prix: number;
     fournisseur_id: number;
     fournisseur?: Fournisseur
+    fournisseur_name?: string;
+}
+
+export interface AchatUpdate {
+    mvt_date?: string;
+    reference?: string;
+    description?: string;
+    quantite?: number;
+    prix?: number;
+    fournisseur_id?: number;
 }

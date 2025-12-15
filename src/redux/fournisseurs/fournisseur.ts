@@ -3,21 +3,29 @@ import { addFournisseurFailure, addFournisseurRequest, addFournisseurSuccess, de
 import { AddFournisseur, GetFournisseurs, UpdateFournisseur } from "./fournisseur-types";
 
 
-export const getFournisseurs: GetFournisseurs = async (page, per_page, dispatch) => {
+export const getFournisseurs: GetFournisseurs = async (
+  dispatch,
+  page,
+  per_page
+) => {
   dispatch(getFournisseursRequest());
-  const url = `/fournisseur/all?page=${page}&per_page=${per_page}`;
+
+  let url = "/fournisseur/all";
+
+  if (page !== undefined && per_page !== undefined) {
+    url += `?page=${page}&per_page=${per_page}`;
+  }
 
   try {
-    let response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url);
     dispatch(getFournisseursSuccess(response.data));
     return true;
   } catch (error: any) {
-    const { data } = error.response;
-    dispatch(getFournisseursFailure(data));
+    dispatch(getFournisseursFailure(error.response?.data));
+    return false;
   }
-
-  return false;
 };
+
 
 export const addFournisseur: AddFournisseur = async (data, dispatch) => {
   dispatch(addFournisseurRequest());

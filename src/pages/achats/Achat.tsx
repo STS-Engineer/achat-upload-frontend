@@ -8,19 +8,33 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getachats } from "../../redux/achats/achat";
-import { Achat } from "../../redux/achats/achat-slice-types";
+import { deleteAchat, getachats, updateAchat } from "../../redux/achats/achat";
+import { Achat, AchatUpdate } from "../../redux/achats/achat-slice-types";
 import Pagination from "../../components/common/Pagination";
+import ConfirmDialog from "../../components/form/ConfirmDialogProps";
+import { Modal } from "../../components/ui/modal";
+import { useModal } from "../../hooks/useModal";
+import Label from "../../components/form/Label";
+import Input from "../../components/form/input/InputField";
+import Button from "../../components/ui/button/Button";
+import TextArea from "../../components/form/input/TextArea";
+import Select from "../../components/form/Select";
+import Enum from "../../components/enum/Enum";
 
 export default function FormElements() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { achatsList } = useSelector((state: any) => state.achat);
+  const { isOpen, openModal, closeModal } = useModal();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedAchat, setSelectedAchat] = useState<Achat | null>(null);
+  const [formAchat, setFormAchat] = useState<AchatUpdate | null>(null);
+  const { fournisseursOptions } =  Enum();
   
-  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier"];
+  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "Actions"];
 
   const handleClick = () => {
     navigate("/upload-achat");
@@ -30,9 +44,54 @@ export default function FormElements() {
     getachats(page, 5, dispatch);
   };
 
+  const openDeleteConfirm = (achat: Achat) => {
+    setSelectedAchat(achat);
+    setIsConfirmOpen(true);
+  }
+
+  const handleConfirmDelete = () => {
+    if (!selectedAchat) return;
+    deleteAchat(selectedAchat.id, dispatch);
+    setIsConfirmOpen(false);
+  }
+
+  const handleSelectChange = (name: string, e: any) => {
+    setFormAchat(prevState => ({
+      ...prevState,
+      [name]: e
+    }));
+  }
+
+  const openEditModal = (achat: Achat) => {
+    setSelectedAchat(achat);
+    setFormAchat(achat);
+    openModal();
+  };
+
+  const handleAchatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedAchat || !formAchat) return;
+    const adjustedAchat = {
+      ...formAchat,
+      fournisseur_id:
+        typeof formAchat.fournisseur_id === "string" ?
+        Number(formAchat.fournisseur_id)
+        : formAchat.fournisseur_id ?? null,
+    };
+
+    updateAchat(selectedAchat.id, adjustedAchat, dispatch);
+    closeModal();
+  }
+
   useEffect(() => {
     getachats(1, 5, dispatch);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedAchat) {
+      setFormAchat(selectedAchat);
+    }
+  }, [selectedAchat]);
 
   return (
     <div className="p-6 space-y-8">
@@ -104,7 +163,23 @@ export default function FormElements() {
 
                             {/* Sticky Name */}
                             <TableCell className="sticky left-[80px] z-20 w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
-                               {q.fournisseur?.name || 'N/A'}
+                               {q.fournisseur?.name ? q.fournisseur.name : q.fournisseur_name || "N/A"}
+                            </TableCell>
+                            <TableCell className="sticky right-0 z-20 w-[200px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-center">
+                              <div className="flex justify-center gap-2">
+                                <button
+                                  className="px-2 py-1 text-xs bg-gradient-to-r from-green-400 to-green-500 text-white rounded-md shadow hover:scale-105 transition-transform duration-200"
+                                  onClick={() => openEditModal(q)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="px-2 py-1 text-xs bg-gradient-to-r from-red-400 to-red-500 text-white rounded-md shadow hover:scale-105 transition-transform duration-200"
+                                  onClick={() => openDeleteConfirm(q)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))
@@ -127,6 +202,85 @@ export default function FormElements() {
             onPageChange={handlePageChange}
           />
         </ComponentCard>
+        <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+          <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+            <div className="px-2 pr-2">
+              <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+                Edit Purchase
+              </h4>
+              <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+                Update the purchase details here
+              </p>
+            </div>
+            <form className="flex flex-col" onSubmit={handleAchatSubmit}>
+              <div className="custom-scrollbar overflow-y-auto px-2 pb-3">
+                <div className="mt-7">
+                  <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                    Purchase Details
+                  </h5>
+
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                    <div className="col-span-2 lg:col-span-1">
+                      <Label>Reference</Label>
+                      <Input
+                        type="text"
+                        id="reference"
+                        placeholder="reference"
+                        value={formAchat?.reference}
+                        onChange={(e) =>
+                          setFormAchat({ ...formAchat, reference: e.target.value })
+                        }
+                        name="reference"
+                      />
+                    </div>
+                    <div className="col-span-2 lg:col-span-1">
+                      <Label>Supplier</Label>
+                      <Select
+                      defaultValue={
+                        typeof formAchat?.fournisseur_id === "string"
+                          ? parseInt(formAchat?.fournisseur_id)
+                          : formAchat?.fournisseur_id || ""}
+                      options={fournisseursOptions}
+                      placeholder="Select Supplier"
+                      onChange={(e) => handleSelectChange("fournisseur_id", e)}
+                    />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1">
+                    <div className="col-span-2 lg:col-span-1">
+                      <Label>Description</Label>
+                      <TextArea
+                        placeholder="description"
+                        value={formAchat?.description}
+                        onChange={(e) =>
+                          setFormAchat({ ...formAchat, description: e })
+                        }
+                        name="description"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+                <Button size="sm" variant="outline" onClick={closeModal}>
+                  Close
+                </Button>
+                <Button size="sm">
+                  Save Changes
+                </Button>
+              </div>
+            </form>
+          </div>
+        </Modal>
+        <ConfirmDialog
+          isOpen={isConfirmOpen}
+          title="Delete purchase"
+          message="Are you sure you want to delete this purchase? This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setIsConfirmOpen(false)}
+        /> 
       </div>
     </div>
   );
