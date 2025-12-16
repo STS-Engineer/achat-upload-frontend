@@ -1,10 +1,10 @@
-# TRACK AUDIT
+# Purchase
 
 project for purchase management
 
 ## Overview
 
-Front-end for managing audits, using
+Front-end for managing purchases, suppliers, logs using
 
 - React 19
 - TypeScript
