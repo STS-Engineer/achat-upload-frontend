@@ -6,14 +6,15 @@ import { AddFournisseur, GetFournisseurs, UpdateFournisseur } from "./fournisseu
 export const getFournisseurs: GetFournisseurs = async (
   dispatch,
   page,
-  per_page
+  per_page,
+  name
 ) => {
   dispatch(getFournisseursRequest());
 
   let url = "/fournisseur/all";
 
   if (page !== undefined && per_page !== undefined) {
-    url += `?page=${page}&per_page=${per_page}`;
+    url += `?page=${page}&per_page=${per_page}&name=${name}`;
   }
 
   try {

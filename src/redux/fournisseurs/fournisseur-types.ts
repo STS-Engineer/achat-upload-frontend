@@ -4,6 +4,7 @@ export type GetFournisseurs = (
   dispatch: Dispatch<any>,
   page?: number,
   per_page?: number,
+  name?: string
 ) => Promise<boolean>;
 
 export type AddFournisseur = (

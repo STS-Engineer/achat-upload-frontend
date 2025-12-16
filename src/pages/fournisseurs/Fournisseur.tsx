@@ -12,7 +12,7 @@ import Pagination from "../../components/common/Pagination";
 import { resetFournisseurState } from "../../redux/fournisseurs/fournisseur-slice";
 import { Modal } from "../../components/ui/modal";
 import ConfirmDialog from "../../components/form/ConfirmDialogProps";
-import { BadgeMinusIcon, SettingsIcon } from "lucide-react";
+import { BadgeMinusIcon, SearchCheck, SettingsIcon } from "lucide-react";
 import useToast from "../../hooks/useToast";
 
 export default function FournisseursElements() {
@@ -31,6 +31,7 @@ export default function FournisseursElements() {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedFournisseur, setSelectedFournisseur] = useState<Fournisseur | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [nameSupplier, setNameSupplier] = useState("");
 
   const handleAddFournisseur = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,9 +80,11 @@ export default function FournisseursElements() {
   }
 
   useEffect(() => {
-    getFournisseurs(dispatch, page, per_page);
-  }, [dispatch, page]);
-
+    if ((nameSupplier && nameSupplier.length > 3) || nameSupplier.length === 0) {
+      getFournisseurs(dispatch, page, per_page, nameSupplier);
+    }
+  }, [nameSupplier, page, dispatch]);
+  
   useEffect(() => {
     setTimeout(() => {
       if (toast) 
@@ -100,6 +103,8 @@ export default function FournisseursElements() {
 
   useToast();
 
+  console.log(fournisseursList)
+
   return (
     <div className="p-8 space-y-16">
       <PageMeta title="supplier Management" description="" />
@@ -110,6 +115,18 @@ export default function FournisseursElements() {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
               supplier List
           </h2>
+          <div className="relative w-full sm:w-[280px]">
+            <SearchCheck 
+              className="absolute top-1/2 -translate-y-1/2 left-3 w-5 h-5"
+            />
+            <Input
+              type="text"
+              placeholder="Search suppliers..."
+              className="
+                pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-white/[0.1]"
+              onChange={(e) => setNameSupplier(e.target.value)}
+            />
+          </div>
         </div>
 
         {/* Empty State */}
@@ -121,7 +138,7 @@ export default function FournisseursElements() {
 
         {/* Grid List */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 ">
-          {fournisseursList.items?.map((f: Fournisseur) => (
+          {fournisseursList?.items?.map((f: Fournisseur) => (
             <div
               key={f.id}
               className="
