@@ -1,8 +1,6 @@
 # TRACK AUDIT
 
-project for audit management
-
-![TrackAudit](./banner.png)
+project for purchase management
 
 ## Overview
 
@@ -25,7 +23,7 @@ Ensure you have the following prerequisites installed and set up:
 Clone the repository using the following command:
 
 ```bash
-git clone https://github.com/STS-Engineer/Audit_Management_frontend.git
+git clone https://github.com/STS-Engineer/achat-upload-frontend.git
 ```
 
 > Windows Users: place the repository near the root of your drive if you face issues while cloning.
