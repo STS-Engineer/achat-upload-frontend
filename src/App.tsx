@@ -11,6 +11,7 @@ import SignIn from "./pages/auth/SignIn";
 import ResetPassword from "./pages/auth/ResetPassword";
 import RequireAuth from "./components/auth/RequireAuth";
 import UserProfiles from "./pages/user/UserProfiles";
+import Documents from "./pages/documents/Documents";
 
 export default function App() {
   return (
@@ -75,6 +76,7 @@ export default function App() {
               <Route path="/fournisseurs" element={<Fournisseur />} />
               <Route path="/logs" element={<LogsPage />} />
               <Route path="/profile" element={<UserProfiles />} />
+              <Route path="/documents" element={<Documents />} />
             </Route>
           </Route>
             {/* Fallback Route */}

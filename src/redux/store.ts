@@ -4,6 +4,7 @@ import fournisseurReducer from './fournisseurs/fournisseur-slice';
 import logReducer from './logs/logs-slice';
 import authReducer from './auth/auth-slice';
 import managerReducer from './managers/manager-slice';
+import documentReducer from './documents/document-slice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     log: logReducer,
     auth: authReducer,
     manager: managerReducer,
+    document: documentReducer,
   },
   devTools: true,
 });

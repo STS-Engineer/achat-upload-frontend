@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import {
   BookCheck,
+  File,
   ListChecks,
 } from "lucide-react";
 
@@ -38,6 +39,11 @@ const navItems: NavItem[] = [
     name: "logs",
     icon: <TableIcon />,
     path: "/logs",
+  },
+  {
+    name: "Documents",
+    icon: <File />,
+    path: "/documents",
   },
 ];
 
