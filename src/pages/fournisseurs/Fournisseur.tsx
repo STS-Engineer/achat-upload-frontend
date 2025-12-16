@@ -84,6 +84,10 @@ export default function FournisseursElements() {
       getFournisseurs(dispatch, page, per_page, nameSupplier);
     }
   }, [nameSupplier, page, dispatch]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [nameSupplier]);
   
   useEffect(() => {
     setTimeout(() => {
