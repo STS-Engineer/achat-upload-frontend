@@ -1,8 +1,7 @@
 import React from "react";
-import GridShape from "../../components/common/GridShape";
 import { Link } from "react-router";
 import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
-import logoAvoCarbon from "/images/logo/avocarbon.png";
+import logoAvoCarbon from "../../assets/logo/avocarbon.png";
 
 export default function AuthLayout({
   children,
@@ -24,7 +23,6 @@ export default function AuthLayout({
         >
           <div className="relative flex items-center justify-center z-1">
             {/* <!-- ===== Common Grid Shape Start ===== --> */}
-            <GridShape />
             <div className="flex flex-col items-center max-w-xs">
               <Link to="/" className="block mb-4">
                 <img
@@ -34,7 +32,7 @@ export default function AuthLayout({
                   alt="Logo"
                 />
               </Link>
-              <p className="text-center text-gray-400 dark:text-white/60">
+              <p className="text-center text-white dark:text-white/60">
                 Welcome
               </p>
             </div>

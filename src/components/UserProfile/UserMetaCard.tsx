@@ -3,7 +3,7 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import FileInput from "../../components/form/input/FileInput";
 import { User } from "../../redux/auth/auth-slice-types";
-import avatar from "../../../public/images/logo/avatar.jpg";
+import avatar from "../../assets/logo/avatar.jpg";
 import { SettingsIcon } from "lucide-react";
 import { useState } from "react";
 import { uploadProfileImage } from "../../redux/auth/auth";

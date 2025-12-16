@@ -2,10 +2,18 @@ import { Fournisseur } from "../fournisseurs/fournisseur-slice-types";
 
 
 export interface Achatstate {
-    achatsList: Achat[];
-    success: boolean;
-    error: boolean;
-    toast: string;
+  achatsList: AchatListResponse;
+  success: boolean;
+  error: boolean;
+  toast: string;
+}
+
+export interface AchatListResponse {
+  achats: Achat[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
 }
 
 export interface Achat {
@@ -28,3 +36,4 @@ export interface AchatUpdate {
     prix?: number;
     fournisseur_id?: number;
 }
+

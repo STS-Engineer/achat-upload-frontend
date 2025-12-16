@@ -3,7 +3,13 @@ import { Fournisseur, Fournisseurstate } from "./fournisseur-slice-types";
 
 
 const initialState : Fournisseurstate    = {
-    fournisseursList:[],
+    fournisseursList:{
+      items: [],
+      page: 1,
+      per_page: 5,
+      total: 0,
+      total_pages: 1,
+    },
     success : false,
     error: false,
     toast: ''

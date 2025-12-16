@@ -2,7 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Achat, Achatstate } from "./achat-slice-types";
 
 const initialState : Achatstate    = {
-    achatsList:[],
+    achatsList: {
+      achats: [],
+      page: 1,
+      per_page: 5,
+      total: 0,
+      total_pages: 1,
+    },
     success : false,
     error: false,
     toast: ''
