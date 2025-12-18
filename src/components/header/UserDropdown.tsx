@@ -4,7 +4,7 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link, useNavigate } from "react-router";
 import { logUserOut, me } from "../../redux/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import avatar from "../../assets/logo/avocarbon.png";
+import avatar from "../../assets/logo/avatar.jpg";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);

@@ -20,7 +20,7 @@ export default function FournisseursElements() {
 
   // Pagination state
   const [page, setPage] = useState(1);
-  const per_page = 3;
+  const per_page = 6;
 
   const { fournisseursList, toast } = useSelector((state: any) => state.fournisseur);
 
@@ -106,8 +106,6 @@ export default function FournisseursElements() {
   }, [dispatch, toast]);
 
   useToast();
-
-  console.log(fournisseursList)
 
   return (
     <div className="p-8 space-y-16">

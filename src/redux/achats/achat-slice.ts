@@ -11,7 +11,8 @@ const initialState : Achatstate    = {
     },
     success : false,
     error: false,
-    toast: ''
+    toast: '',
+    requests: {}
 }
 
 const Achatslice = createSlice({
@@ -34,16 +35,28 @@ const Achatslice = createSlice({
     uploadExcelFileRequest(state) {
       state.success = false;
       state.error = false;
+      state.requests= {
+        ...state.requests,
+        uploadExcelFileRequest: new Date().toISOString()
+      };
     },
     uploadExcelFileSuccess(state) {
       state.toast = 'File uploaded successfully';
       state.success = true;
       state.error = false;
+      state.requests= {
+        ...state.requests,
+        uploadExcelFileSuccess: new Date().toISOString()
+      };
     },
-    uploadExcelFileFailure(state) {
-      state.toast = 'something went wrong';
+    uploadExcelFileFailure(state, action) {
+      state.toast = action.payload.detail || 'something went wrong';
       state.success = false;
       state.error = true;
+      state.requests= {
+        ...state.requests,
+        uploadExcelFileFailure: new Date().toISOString()
+      };
     },
     updateAchatRequest(state) {
           state.success = false;
@@ -84,6 +97,12 @@ const Achatslice = createSlice({
     },
     clearToast(state) {
       state.toast = '';
+    },
+    resetAchatState(state) {
+      state.success = false;
+      state.error = false;
+      state.toast = '';
+      state.requests = {};
     }
   }
 })
@@ -101,7 +120,8 @@ export const {
     deleteAchatRequest,
     deleteAchatSuccess,
     deleteAchatFailure,
-    clearToast
+    clearToast,
+    resetAchatState
 } = Achatslice.actions;
 
 export default Achatslice.reducer;

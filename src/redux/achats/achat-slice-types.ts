@@ -6,6 +6,7 @@ export interface Achatstate {
   success: boolean;
   error: boolean;
   toast: string;
+  requests: Record<string, unknown>;
 }
 
 export interface AchatListResponse {
@@ -23,6 +24,7 @@ export interface Achat {
     description: string;
     quantite: number;
     prix: number;
+    currency: string;
     fournisseur_id: number;
     fournisseur?: Fournisseur
     fournisseur_name?: string;

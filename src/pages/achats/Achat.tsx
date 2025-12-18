@@ -24,6 +24,9 @@ import TextArea from "../../components/form/input/TextArea";
 import Select from "../../components/form/Select";
 import Enum from "../../components/enum/Enum";
 import useToast from "../../hooks/useToast";
+import { resetAchatState } from "../../redux/achats/achat-slice";
+import DescriptionCell from "../../components/form/form-elements/DescriptionCell";
+import { InfoIcon } from "lucide-react";
 
 export default function FormElements() {
   const navigate = useNavigate();
@@ -35,7 +38,8 @@ export default function FormElements() {
   const [formAchat, setFormAchat] = useState<AchatUpdate | null>(null);
   const { fournisseursOptions } =  Enum();
   
-  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "Actions"];
+  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "currency", "Actions"];
+  const [errorSupplierSelect, setErrorSupplierSelect] = useState<string>('');
 
   const handleClick = () => {
     navigate("/upload-achat");
@@ -61,6 +65,7 @@ export default function FormElements() {
       ...prevState,
       [name]: e
     }));
+    setErrorSupplierSelect('');
   }
 
   const openEditModal = (achat: Achat) => {
@@ -70,19 +75,20 @@ export default function FormElements() {
   };
 
   const handleAchatSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedAchat || !formAchat) return;
-    const adjustedAchat = {
-      ...formAchat,
-      fournisseur_id:
-        typeof formAchat.fournisseur_id === "string" ?
-        Number(formAchat.fournisseur_id)
-        : formAchat.fournisseur_id ?? null,
-    };
+  e.preventDefault();
+  if (!selectedAchat || !formAchat) return;
 
-    updateAchat(selectedAchat.id, adjustedAchat, dispatch);
-    closeModal();
-  }
+  const adjustedAchat = {
+    ...formAchat,
+    fournisseur_id:
+      typeof formAchat.fournisseur_id === "string"
+        ? parseInt(formAchat.fournisseur_id)
+        : formAchat.fournisseur_id ?? null,
+  };
+
+  updateAchat(selectedAchat.id, adjustedAchat, dispatch);
+  closeModal();
+};
 
   useEffect(() => {
     getachats(1, 5, dispatch);
@@ -93,6 +99,15 @@ export default function FormElements() {
       setFormAchat(selectedAchat);
     }
   }, [selectedAchat]);
+
+  useEffect(() => {
+    dispatch(resetAchatState());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (formAchat?.fournisseur_id === null) {
+      setErrorSupplierSelect("Supplier is required");
+    }}, [formAchat?.fournisseur_id]);
 
   useToast();
 
@@ -148,27 +163,40 @@ export default function FormElements() {
                             key={q.id}
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
                           >
-                            <TableCell className="sticky left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            <TableCell className="left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.mvt_date}
                             </TableCell>
-                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            <TableCell className="left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.reference}
                             </TableCell>
-                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                {q.description}
+                            <TableCell
+                                className="
+                                  left-0 w-[200px]
+                                  bg-white dark:bg-gray-900
+                                  group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                                  px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                                "
+                              >
+                                {Boolean(q.description && q.description.trim()) ? (
+                                  <DescriptionCell description={q.description} />
+                                ) : (
+                                  <span className="text-gray-400 italic"></span>
+                                )}
                             </TableCell>
-                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.quantite}
                             </TableCell>
-                            <TableCell className="sticky left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.prix}
                             </TableCell>
-
-                            {/* Sticky Name */}
-                            <TableCell className="sticky left-[80px] z-20 w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
+                            <TableCell className="left-[80px] w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
                                {q.fournisseur?.name ? q.fournisseur.name : q.fournisseur_name || "N/A"}
                             </TableCell>
-                            <TableCell className="sticky right-0 z-20 w-[200px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-center">
+                            <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                {q.currency}
+                            </TableCell>
+
+                            <TableCell className="right-0 w-[200px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-center">
                               <div className="flex justify-center gap-2">
                                 <button
                                   className="px-2 py-1 text-xs bg-gradient-to-r from-green-400 to-green-500 text-white rounded-md shadow hover:scale-105 transition-transform duration-200"
@@ -247,9 +275,15 @@ export default function FormElements() {
                       placeholder="Select Supplier"
                       onChange={(e) => handleSelectChange("fournisseur_id", e)}
                     />
+                    {errorSupplierSelect && (
+                      <p className="mt-2 text-sm text-error-500">
+                          <InfoIcon className="inline w-4 h-4 mr-1 mb-1" />
+                          {errorSupplierSelect}
+                      </p>
+                    )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1">
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1 mt-2">
                     <div className="col-span-2 lg:col-span-1">
                       <Label>Description</Label>
                       <TextArea
@@ -268,7 +302,10 @@ export default function FormElements() {
                 <Button size="sm" variant="outline" onClick={closeModal}>
                   Close
                 </Button>
-                <Button size="sm">
+                <Button 
+                  size="sm" 
+                  disabled={errorSupplierSelect.length > 0}
+                >
                   Save Changes
                 </Button>
               </div>

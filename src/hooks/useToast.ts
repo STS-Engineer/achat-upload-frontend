@@ -1,22 +1,28 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
-
 import { clearToast } from "../redux/achats/achat-slice";
+import toast from "react-hot-toast";
 
 export const useToast = () => {
   const dispatch = useDispatch();
 
-  const slices = useSelector((state: any) => [
-    { ...state.achat, clear: clearToast },
-    { ...state.fournisseur, clear: clearToast },
-    { ...state.transaction, clear: clearToast },
-    { ...state.log, clear: clearToast },
-    { ...state.auth, clear: clearToast },
-    { ...state.manager, clear: clearToast },
-  ]);
+  const achat = useSelector((state: any) => state.achat);
+  const fournisseur = useSelector((state: any) => state.fournisseur);
+  const transaction = useSelector((state: any) => state.transaction);
+  const log = useSelector((state: any) => state.log);
+  const auth = useSelector((state: any) => state.auth);
+  const manager = useSelector((state: any) => state.manager);
 
   useEffect(() => {
+    const slices = [
+      { ...achat, clear: clearToast },
+      { ...fournisseur, clear: clearToast },
+      { ...transaction, clear: clearToast },
+      { ...log, clear: clearToast },
+      { ...auth, clear: clearToast },
+      { ...manager, clear: clearToast },
+    ];
+
     const activeToast = slices.find(
       (s) => s.toast && (s.success || s.error)
     );
@@ -32,7 +38,7 @@ export const useToast = () => {
     }
 
     dispatch(activeToast.clear());
-  }, [slices, dispatch]);
+  }, [achat, fournisseur, transaction, log, auth, manager, dispatch]);
 };
 
 export default useToast;
