@@ -23,6 +23,11 @@ jobs:
         with:
           node-version: '22.x'
 
+      - name: Create .env file
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env
+          cat .env
+
       - name: npm install, build, and test
         run: |
           npm install
