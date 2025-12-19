@@ -26,6 +26,9 @@ export interface Achat {
     prix: number;
     currency: string;
     fournisseur_id: number;
+    plant_id: number;
+    plant_name?: string;
+    plant: Plant;
     fournisseur?: Fournisseur
     fournisseur_name?: string;
 }
@@ -37,5 +40,10 @@ export interface AchatUpdate {
     quantite?: number;
     prix?: number;
     fournisseur_id?: number;
+    plant_id?: number;
 }
 
+export interface Plant {
+    id: number;
+    name: string;
+}

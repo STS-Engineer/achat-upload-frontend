@@ -32,6 +32,7 @@ export default function FournisseursElements() {
   const [selectedFournisseur, setSelectedFournisseur] = useState<Fournisseur | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [nameSupplier, setNameSupplier] = useState("");
+  const [errorEmailFournisseur, setErrorEmailFournisseur] = useState<string>('');
 
   const handleAddFournisseur = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +78,14 @@ export default function FournisseursElements() {
       ...prevState,
       [name]: value
     }));
+    if (name === "email") {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value) || value.trim() === "") {
+          setErrorEmailFournisseur("Please enter a valid email address.");
+        } else {
+          setErrorEmailFournisseur("");
+        }
+    }
   }
 
   useEffect(() => {
@@ -104,6 +113,12 @@ export default function FournisseursElements() {
         }
     }, 1500);
   }, [dispatch, toast]);
+
+  useEffect(() => {
+    if(formFournisseur.email?.length === 0){
+      setErrorEmailFournisseur("Please enter a valid email address.");
+    }
+  }, [formFournisseur.email]);
 
   useToast();
 
@@ -225,9 +240,7 @@ export default function FournisseursElements() {
                 id="name"
                 placeholder="nom"
                 value={formFournisseur.name}
-                onChange={(e) =>
-                  setFormFournisseur({ ...formFournisseur, name: e.target.value })
-                }
+                onChange={handleInputValue}
                 name="name"
               />
             </div>
@@ -238,16 +251,20 @@ export default function FournisseursElements() {
                 id="email"
                 placeholder="email"
                 value={formFournisseur.email}
-                onChange={(e) =>
-                  setFormFournisseur({ ...formFournisseur, email: e.target.value })
-                }
+                onChange={handleInputValue}
                 name="email"
               />
+              { errorEmailFournisseur && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errorEmailFournisseur}
+                </p>
+              )}
             </div>
             <Button
               className="px-4 py-2 rounded-lg text-white font-medium transition 
                 bg-gradient-to-r from-[#F68C1F] to-[#EF7807] hover:from-[#F78F3F] hover:to-[#F47A07]
                 dark:from-[#B55A00] dark:to-[#8A4600]"
+              disabled={errorEmailFournisseur.length > 0 || formFournisseur.name.trim() === ""}
             >
               Add
             </Button>
@@ -299,6 +316,11 @@ export default function FournisseursElements() {
                         className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
                         name="email"
                     />
+                    { errorEmailFournisseur && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errorEmailFournisseur}
+                      </p>
+                    )}
                     </div>
                 </div>
 
@@ -312,6 +334,7 @@ export default function FournisseursElements() {
                     </button>
                     <Button
                         className="px-4 py-2 bg-gradient-to-r from-[#F68C1F] to-[#EF7807] text-white rounded-lg"
+                        disabled={errorEmailFournisseur.length > 0 || formFournisseur.name.trim() === ""}
                     >
                         Update Supplier
                     </Button>

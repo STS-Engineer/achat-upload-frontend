@@ -21,12 +21,14 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
 import Button from "../../components/ui/button/Button";
 import TextArea from "../../components/form/input/TextArea";
-import Select from "../../components/form/Select";
 import Enum from "../../components/enum/Enum";
 import useToast from "../../hooks/useToast";
 import { resetAchatState } from "../../redux/achats/achat-slice";
 import DescriptionCell from "../../components/form/form-elements/DescriptionCell";
 import { InfoIcon } from "lucide-react";
+import FournisseurCell from "../../components/form/form-elements/FournisseurCell";
+import PlantCell from "../../components/form/form-elements/PlantCell";
+import Select from "react-select";
 
 export default function FormElements() {
   const navigate = useNavigate();
@@ -36,10 +38,11 @@ export default function FormElements() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedAchat, setSelectedAchat] = useState<Achat | null>(null);
   const [formAchat, setFormAchat] = useState<AchatUpdate | null>(null);
-  const { fournisseursOptions } =  Enum();
+  const { fournisseursOptions, plantsOptions } =  Enum();
   
-  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "currency", "Actions"];
+  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "Plant", "currency", achatsList?.achats ? "Actions" : ""];
   const [errorSupplierSelect, setErrorSupplierSelect] = useState<string>('');
+  const [errorPlantSelect, setErrorPlantSelect] = useState<string>('');
 
   const handleClick = () => {
     navigate("/upload-achat");
@@ -65,7 +68,14 @@ export default function FormElements() {
       ...prevState,
       [name]: e
     }));
-    setErrorSupplierSelect('');
+    if (name === "plant_id")
+    {
+      setErrorPlantSelect('');
+    }
+    if (name === "fournisseur_id")
+    {
+      setErrorSupplierSelect('');
+    }
   }
 
   const openEditModal = (achat: Achat) => {
@@ -84,6 +94,10 @@ export default function FormElements() {
       typeof formAchat.fournisseur_id === "string"
         ? parseInt(formAchat.fournisseur_id)
         : formAchat.fournisseur_id ?? null,
+    plant_id:
+      typeof formAchat.plant_id === "string"
+        ? parseInt(formAchat.plant_id)
+        : formAchat.plant_id ?? null,
   };
 
   updateAchat(selectedAchat.id, adjustedAchat, dispatch);
@@ -107,7 +121,11 @@ export default function FormElements() {
   useEffect(() => {
     if (formAchat?.fournisseur_id === null) {
       setErrorSupplierSelect("Supplier is required");
-    }}, [formAchat?.fournisseur_id]);
+    }
+    if (formAchat?.plant_id === null) {
+      setErrorPlantSelect("Plant is required");
+    }
+  }, [formAchat?.fournisseur_id, formAchat?.plant_id]);
 
   useToast();
 
@@ -164,7 +182,9 @@ export default function FormElements() {
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
                           >
                             <TableCell className="left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                {q.mvt_date}
+                              {q.mvt_date
+                                ? new Date(q.mvt_date).toLocaleDateString("fr-FR")
+                                : "—"}
                             </TableCell>
                             <TableCell className="left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.reference}
@@ -189,8 +209,29 @@ export default function FormElements() {
                             <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.prix}
                             </TableCell>
-                            <TableCell className="left-[80px] w-[250px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3">
-                               {q.fournisseur?.name ? q.fournisseur.name : q.fournisseur_name || "N/A"}
+                            <TableCell
+                              className="
+                                left-0 w-[200px]
+                                bg-white dark:bg-gray-900
+                                group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                                px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                              "
+                            >
+                              <FournisseurCell
+                                fournisseur={q.fournisseur?.name || q.fournisseur_name}
+                              />
+                            </TableCell>
+                            <TableCell
+                              className="
+                                left-0 w-[200px]
+                                bg-white dark:bg-gray-900
+                                group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05]
+                                px-4 py-3 text-sm text-gray-500 dark:text-gray-400
+                              "
+                            >
+                              <PlantCell
+                                plant={q.plant?.name || q.plant_name}
+                              />
                             </TableCell>
                             <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.currency}
@@ -267,14 +308,17 @@ export default function FormElements() {
                     <div className="col-span-2 lg:col-span-1">
                       <Label>Supplier</Label>
                       <Select
-                      defaultValue={
-                        typeof formAchat?.fournisseur_id === "string"
-                          ? parseInt(formAchat?.fournisseur_id)
-                          : formAchat?.fournisseur_id || ""}
-                      options={fournisseursOptions}
-                      placeholder="Select Supplier"
-                      onChange={(e) => handleSelectChange("fournisseur_id", e)}
-                    />
+                        options={fournisseursOptions}
+                        placeholder="Select Supplier"
+                        value={fournisseursOptions.find(
+                          (o: any) => o.value === formAchat?.fournisseur_id
+                        )}
+                        onChange={(option) =>
+                          handleSelectChange("fournisseur_id", option?.value)
+                        }
+                        maxMenuHeight={200}
+                        isClearable
+                      />
                     {errorSupplierSelect && (
                       <p className="mt-2 text-sm text-error-500">
                           <InfoIcon className="inline w-4 h-4 mr-1 mb-1" />
@@ -283,7 +327,30 @@ export default function FormElements() {
                     )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1 mt-2">
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1 mt-4">
+                    <div className="col-span-1 lg:col-span-1">
+                      <Label>Plant</Label>
+                      <Select
+                        options={plantsOptions}
+                        placeholder="Select Plant"
+                        value={plantsOptions.find(
+                          (o: any) => o.value === formAchat?.plant_id
+                        )}
+                        onChange={(option) =>
+                          handleSelectChange("plant_id", option?.value)
+                        }
+                        maxMenuHeight={100}
+                        isClearable
+                      />
+                      {errorPlantSelect && (
+                        <p className="mt-2 text-sm text-error-500">
+                            <InfoIcon className="inline w-4 h-4 mr-1 mb-1" />
+                            {errorPlantSelect}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-1 mt-4">
                     <div className="col-span-2 lg:col-span-1">
                       <Label>Description</Label>
                       <TextArea

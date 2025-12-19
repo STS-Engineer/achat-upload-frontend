@@ -16,7 +16,7 @@ import Pagination from "../../components/common/Pagination";
 import Input from "../../components/form/input/InputField";
 import { SearchCheck } from "lucide-react";
 import { DownloadIcon } from "../../icons";
-import useToast from "../../hooks/useToast";
+import { resetLogsState } from "../../redux/logs/logs-slice";
 
 export default function FormElements() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function FormElements() {
   const per_page = 5;
   const [description, setDescription] = useState("");
 
-  const { logsList } = useSelector((state: any) => state.log);
+  const { logsList, success, error } = useSelector((state: any) => state.log);
 
   const headers = ["Problem Type", "Description", "File Name"];
 
@@ -48,7 +48,13 @@ export default function FormElements() {
     }
   }, [description, page, dispatch]);
 
-  useToast();
+  useEffect(() => {
+    setTimeout(() => {
+      if (success || error) {
+        dispatch(resetLogsState());
+      }
+    }, 1500);
+  }, [success, error, dispatch]);
 
   return (
     <div className="p-6 space-y-8">

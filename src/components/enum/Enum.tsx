@@ -27,12 +27,21 @@ const Enum = () => {
       : [];
   }, [fournisseursList]);
 
+  const plantsOptions = useMemo(() => {
+    return managerList?.items?.length
+      ? managerList?.items?.map((manager: any) => ({
+          value: manager.id,
+          label: manager.name,
+        }))
+      : [];
+  }, [managerList]);
+
   useEffect(() => {
     getManagers(dispatch);
     getFournisseurs(dispatch);
   }, [dispatch]);
 
-  return { managerOptions, fournisseursOptions};
+  return { managerOptions, fournisseursOptions, plantsOptions};
 };
 
 export default Enum;
