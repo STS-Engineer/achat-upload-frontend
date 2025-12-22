@@ -11,7 +11,7 @@ import { store } from "./redux/store.ts";
 import { authService } from "./services/authService.ts";
 import "./services/axiosInterceptors.ts";
 
-authService.setup(localStorage.getItem("token"));
+authService.setup(localStorage.getItem("token"), localStorage.getItem("refreshToken"));
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
