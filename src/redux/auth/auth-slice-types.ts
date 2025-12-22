@@ -1,11 +1,12 @@
 export interface AuthState {
-    isAuthenticated: boolean;
-    token: string | null;
-    error: boolean;
-    success: boolean;
-    toast: string;
-    role: string;
-    user: User | null;
+  isAuthenticated: boolean;
+  token: string | null;
+  refreshToken: string | null;
+  success: boolean;
+  error: boolean;
+  toast: string;
+  role: string;
+  user: any | null;
 }
 
 export interface User {

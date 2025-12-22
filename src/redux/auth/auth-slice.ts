@@ -4,6 +4,7 @@ import { AuthState } from '../../redux/auth/auth-slice-types';
 const initialState: AuthState = {
   isAuthenticated: false,
   token: null,
+  refreshToken: null,
   success: false,
   error: false,
   toast: '',
@@ -20,13 +21,16 @@ const authSlice = createSlice({
       state.error = false;
       state.success = false;
       state.token = null;
+      state.refreshToken = null;
     },
     loginSuccess(state, action) {
       state.isAuthenticated = true;
       state.toast='Email et mot de passe sont valides';
       state.token = action.payload.access_token;
+      state.refreshToken = action.payload.refresh_token; // Store refresh token
       state.role = action.payload.roles;
       localStorage.setItem('token', action.payload.access_token);
+      localStorage.setItem('refreshToken', action.payload.refresh_token); // Store in localStorage
       state.error = false;
       state.success = true;
     },
@@ -46,8 +50,10 @@ const authSlice = createSlice({
     },
     logout(state) {
       localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
       state.isAuthenticated  = false;
       state.token = null;
+      state.refreshToken = null;
       state.role = '';
     },
     resetAuthState(state) {
@@ -57,6 +63,24 @@ const authSlice = createSlice({
     },
     setIsAuth(state) {
       state.isAuthenticated = true;
+    },
+    refreshTokenRequest(state) {
+      state.error = false;
+    },
+    refreshTokenSuccess(state, action) {
+      state.token = action.payload.access_token;
+      state.refreshToken = action.payload.refresh_token;
+      localStorage.setItem('token', action.payload.access_token);
+      localStorage.setItem('refreshToken', action.payload.refresh_token);
+      state.error = false;
+    },
+    refreshTokenFailure(state) {
+      state.isAuthenticated = false;
+      state.token = null;
+      state.refreshToken = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      state.error = true;
     },
     resetPasswordRequest(state) {
       state.error = false;
@@ -124,6 +148,9 @@ export const {
   logout,
   resetAuthState,
   setIsAuth,
+  refreshTokenRequest,
+  refreshTokenSuccess,
+  refreshTokenFailure,
   resetPasswordRequest,
   resetPasswordSuccess,
   resetPasswordFailure,
