@@ -58,7 +58,7 @@ const Fournisseurslice = createSlice({
     },
     updateFournisseurSuccess(state, action) {
       const index = state.fournisseursList.items.findIndex(
-        (fournisseur: Fournisseur) => fournisseur.id === action.payload.id
+        (fournisseur: Fournisseur) => fournisseur.supplier_id === action.payload.supplier_id
       );
       if (index !== -1) {
         state.fournisseursList.items[index] = action.payload;
@@ -78,7 +78,7 @@ const Fournisseurslice = createSlice({
     },
     deleteFournisseurSuccess(state, action) {
       state.fournisseursList.items = state.fournisseursList.items.filter(
-        (fournisseur: Fournisseur) => fournisseur.id !== action.payload.id
+        (fournisseur: Fournisseur) => fournisseur.supplier_id !== action.payload.id
       );
       state.toast = 'Supplier deleted successfully';
       state.success = true;

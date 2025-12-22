@@ -191,8 +191,10 @@ export default function FormElements() {
                             key={q.id}
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
                           >
-                            <TableCell className="left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                           <TableCell className="left-0 z-20 w-[200px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="block max-w-[180px] truncate">
                                 {q.reference}
+                              </span>
                             </TableCell>
                             <TableCell
                                 className="
