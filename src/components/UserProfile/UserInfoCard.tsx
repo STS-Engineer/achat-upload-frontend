@@ -6,7 +6,7 @@ import Label from "../form/Label";
 import { User, UserUpdate } from "../../redux/auth/auth-slice-types";
 import { SettingsIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import Select from "../form/Select";
+import Select from "react-select";
 import Enum from "../enum/Enum";
 import { updateUser } from "../../redux/auth/auth";
 import { useDispatch } from "react-redux";
@@ -165,15 +165,18 @@ export default function UserInfoCard({ user } : { user: User }) {
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Managers</Label>
-                    <Select
-                      defaultValue={
-                        typeof formUser?.manager_id === "string"
-                          ? parseInt(formUser?.manager_id)
-                          : formUser?.manager_id || ""}
-                      options={managerOptions}
-                      placeholder="Select Manager"
-                      onChange={(e) => handleSelectChange("manager_id", e)}
-                    />
+                      <Select
+                        options={managerOptions}
+                        placeholder="Select Manager"
+                        value={managerOptions.find(
+                          (o: any) => o.value === formUser?.manager_id
+                        )}
+                        onChange={(option) =>
+                          handleSelectChange("manager_id", option?.value)
+                        }
+                        maxMenuHeight={200}
+                        isClearable
+                      />
                   </div>
                 </div>
               </div>

@@ -21,8 +21,8 @@ const Enum = () => {
   const fournisseursOptions = useMemo(() => {
     return fournisseursList?.items?.length
       ? fournisseursList.items.map((fournisseur: any) => ({
-          value: fournisseur.id,
-          label: fournisseur.name,
+          value: fournisseur.supplier_id,
+          label: fournisseur.supplier_name,
         }))
       : [];
   }, [fournisseursList]);

@@ -25,14 +25,12 @@ export default function FournisseursElements() {
   const { fournisseursList, toast } = useSelector((state: any) => state.fournisseur);
 
   const [formFournisseur, setFormFournisseur] = useState({
-    name: "",
-    email: "",
+    supplier_name: "",
   });
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedFournisseur, setSelectedFournisseur] = useState<Fournisseur | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [nameSupplier, setNameSupplier] = useState("");
-  const [errorEmailFournisseur, setErrorEmailFournisseur] = useState<string>('');
 
   const handleAddFournisseur = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,13 +60,13 @@ export default function FournisseursElements() {
   const handleEditSubmit = (formFournisseur: any) => (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!selectedFournisseur) return;
-      updateFournisseur(selectedFournisseur.id, formFournisseur, dispatch );
+      updateFournisseur(selectedFournisseur.supplier_id, formFournisseur, dispatch );
       closeModal();
   }
 
   const handleConfirmDelete = () => {
       if (!selectedFournisseur) return;
-      deleteFournisseur(selectedFournisseur?.id, dispatch);
+      deleteFournisseur(selectedFournisseur?.supplier_id, dispatch);
       setIsDeleteConfirmOpen(false);
   }
 
@@ -78,14 +76,6 @@ export default function FournisseursElements() {
       ...prevState,
       [name]: value
     }));
-    if (name === "email") {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value) || value.trim() === "") {
-          setErrorEmailFournisseur("Please enter a valid email address.");
-        } else {
-          setErrorEmailFournisseur("");
-        }
-    }
   }
 
   useEffect(() => {
@@ -104,8 +94,7 @@ export default function FournisseursElements() {
         {
           dispatch(resetFournisseurState());
           setFormFournisseur({
-            name: "",
-            email: "",
+            supplier_name: "",
           });
           if (isOpen) {
             setIsOpen(false);
@@ -113,12 +102,6 @@ export default function FournisseursElements() {
         }
     }, 1500);
   }, [dispatch, toast]);
-
-  useEffect(() => {
-    if(formFournisseur.email?.length === 0){
-      setErrorEmailFournisseur("Please enter a valid email address.");
-    }
-  }, [formFournisseur.email]);
 
   useToast();
 
@@ -157,7 +140,7 @@ export default function FournisseursElements() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 ">
           {fournisseursList?.items?.map((f: Fournisseur) => (
             <div
-              key={f.id}
+              key={f.supplier_id}
               className="
                 relative
                 rounded-2xl border bg-white dark:bg-gray-900 shadow-sm p-6
@@ -199,19 +182,8 @@ export default function FournisseursElements() {
           {/* Content */}
           <div className="space-y-1 pr-10">
             <h3 className="text-md font-normal text-gray-800 dark:text-gray-100">
-              {f.name}
+              {f.supplier_name}
             </h3>
-
-            <span
-              className="
-                inline-block mt-2 px-3 py-1 text-xs font-medium
-                bg-blue-100 text-blue-700
-                dark:bg-blue-900/30 dark:text-blue-300
-                rounded-full
-              "
-            >
-              {f.email}
-            </span>
           </div>
         </div>
           ))}
@@ -239,32 +211,16 @@ export default function FournisseursElements() {
                 type="text"
                 id="name"
                 placeholder="nom"
-                value={formFournisseur.name}
+                value={formFournisseur.supplier_name}
                 onChange={handleInputValue}
-                name="name"
+                name="supplier_name"
               />
-            </div>
-            <div>
-              <Label>Email</Label>
-              <Input
-                type="email"
-                id="email"
-                placeholder="email"
-                value={formFournisseur.email}
-                onChange={handleInputValue}
-                name="email"
-              />
-              { errorEmailFournisseur && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errorEmailFournisseur}
-                </p>
-              )}
             </div>
             <Button
               className="px-4 py-2 rounded-lg text-white font-medium transition 
                 bg-gradient-to-r from-[#F68C1F] to-[#EF7807] hover:from-[#F78F3F] hover:to-[#F47A07]
                 dark:from-[#B55A00] dark:to-[#8A4600]"
-              disabled={errorEmailFournisseur.length > 0 || formFournisseur.name.trim() === ""}
+              disabled={formFournisseur.supplier_name.trim() === ""}
             >
               Add
             </Button>
@@ -297,31 +253,12 @@ export default function FournisseursElements() {
                     </Label>
                     <Input
                         type="text"
-                        value={formFournisseur?.name || ""}
+                        value={formFournisseur?.supplier_name || ""}
                         onChange={handleInputValue}
                         className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
-                        name="name"
+                        name="supplier_name"
                     />
-                    </div>
-
-                    {/* Code */}
-                    <div>
-                    <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                        Email
-                    </Label>
-                    <input
-                        type="text"
-                        value={formFournisseur?.email || ""}
-                        onChange={handleInputValue}
-                        className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
-                        name="email"
-                    />
-                    { errorEmailFournisseur && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {errorEmailFournisseur}
-                      </p>
-                    )}
-                    </div>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 mt-6 sm:justify-end">
@@ -334,7 +271,7 @@ export default function FournisseursElements() {
                     </button>
                     <Button
                         className="px-4 py-2 bg-gradient-to-r from-[#F68C1F] to-[#EF7807] text-white rounded-lg"
-                        disabled={errorEmailFournisseur.length > 0 || formFournisseur.name.trim() === ""}
+                        disabled={formFournisseur.supplier_name.trim() === ""}
                     >
                         Update Supplier
                     </Button>

@@ -14,7 +14,7 @@ export interface FournisseurListResponse {
 }
 
 export interface Fournisseur {
-    id: number;
-    name: string;
-    email: string;
+    supplier_id: number;
+    supplier_name: string;
+    description: string;
 }

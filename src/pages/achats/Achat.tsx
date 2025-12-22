@@ -40,7 +40,17 @@ export default function FormElements() {
   const [formAchat, setFormAchat] = useState<AchatUpdate | null>(null);
   const { fournisseursOptions, plantsOptions } =  Enum();
   
-  const headers = ["mvt Date", "reference", "description", "Quantity", "Price Unit", "supplier", "Plant", "currency", achatsList?.achats ? "Actions" : ""];
+  const headers = [
+    "Reference",
+    "Description",
+    "Mvt Date",
+    "Quantity",
+    "Price Unit",
+    "Supplier",
+    "Plant",
+    "Currency",
+    achatsList?.achats?.length > 0 ? "Actions" : ""
+  ];
   const [errorSupplierSelect, setErrorSupplierSelect] = useState<string>('');
   const [errorPlantSelect, setErrorPlantSelect] = useState<string>('');
 
@@ -181,11 +191,6 @@ export default function FormElements() {
                             key={q.id}
                             className="divide-x divide-gray-100 dark:divide-white/[0.05] group hover:bg-blue-50 dark:hover:bg-white/[0.05] transition-colors duration-200"
                           >
-                            <TableCell className="left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                              {q.mvt_date
-                                ? new Date(q.mvt_date).toLocaleDateString("fr-FR")
-                                : "—"}
-                            </TableCell>
                             <TableCell className="left-0 z-20 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.reference}
                             </TableCell>
@@ -203,6 +208,11 @@ export default function FormElements() {
                                   <span className="text-gray-400 italic"></span>
                                 )}
                             </TableCell>
+                            <TableCell className="left-0 z-20 w-[120px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                              {q.mvt_date
+                                ? new Date(q.mvt_date).toLocaleDateString("fr-FR")
+                                : "—"}
+                            </TableCell>
                             <TableCell className="left-0 w-[80px] bg-white dark:bg-gray-900 group-hover:bg-blue-50 dark:group-hover:bg-white/[0.05] px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                 {q.quantite}
                             </TableCell>
@@ -218,7 +228,7 @@ export default function FormElements() {
                               "
                             >
                               <FournisseurCell
-                                fournisseur={q.fournisseur?.name || q.fournisseur_name}
+                                fournisseur={q.fournisseur?.supplier_name || q.fournisseur_name}
                               />
                             </TableCell>
                             <TableCell
