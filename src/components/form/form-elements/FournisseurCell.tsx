@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 type FournisseurCellProps = {
   fournisseur?: string | null;
@@ -6,22 +6,33 @@ type FournisseurCellProps = {
 
 const FournisseurCell = ({ fournisseur }: FournisseurCellProps) => {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
 
   if (!fournisseur) {
     return <span className="text-gray-400 italic">N/A</span>;
   }
 
+  const handleMouseEnter = () => {
+    const el = textRef.current;
+    if (!el) return;
+
+    // ✅ afficher la card seulement si le texte est tronqué
+    const isTruncated = el.scrollWidth > el.clientWidth;
+    if (!isTruncated) return;
+
+    const rect = el.getBoundingClientRect();
+    setPos({
+      top: rect.bottom + 6,
+      left: rect.left,
+    });
+  };
+
   return (
     <>
       <p
+        ref={textRef}
         className="truncate max-w-[180px] cursor-help"
-        onMouseEnter={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          setPos({
-            top: rect.bottom + 6,
-            left: rect.left,
-          });
-        }}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setPos(null)}
       >
         {fournisseur}

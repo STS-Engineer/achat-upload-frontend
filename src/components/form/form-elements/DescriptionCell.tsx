@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 const DescriptionCell = ({ description }: { description: string }) => {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -20,18 +21,27 @@ const DescriptionCell = ({ description }: { description: string }) => {
     };
   }, [pos]);
 
+  const handleMouseEnter = () => {
+    const el = textRef.current;
+    if (!el) return;
+
+    const isTruncated = el.scrollWidth > el.clientWidth;
+
+    if (!isTruncated) return;
+
+    const rect = el.getBoundingClientRect();
+    setPos({
+      top: rect.bottom - 10 + window.scrollY,
+      left: rect.left + window.scrollX,
+    });
+  };
+
   return (
     <>
       <p
+        ref={textRef}
         className="truncate max-w-[180px] cursor-help"
-        onMouseEnter={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          console.log(rect);
-          setPos({
-            top: rect.bottom - 10 + window.scrollY,
-            left: rect.left + window.scrollX,
-          });
-        }}
+        onMouseEnter={handleMouseEnter}
       >
         {description}
       </p>
