@@ -131,14 +131,19 @@ export default function FormElements() {
   useEffect(() => {
     if (formAchat?.fournisseur_id === null) {
       setErrorSupplierSelect("Supplier is required");
+    } else if (formAchat?.fournisseur_id !== null) {
+      setErrorSupplierSelect("");
     }
     if (formAchat?.plant_id === null) {
       setErrorPlantSelect("Plant is required");
+    } else if (formAchat?.plant_id !== null) {
+      setErrorPlantSelect("");
     }
   }, [formAchat?.fournisseur_id, formAchat?.plant_id]);
 
   useToast();
 
+  console.log("achatsList", formAchat);
   return (
     <div className="p-6 space-y-8">
       <PageMeta title="purchase" description="..." />
@@ -167,6 +172,9 @@ export default function FormElements() {
                           stickyClasses =
                             "sticky left-[80px] z-40 w-[250px] shadow-[2px_0_6px_-3px_rgba(0,0,0,0.1)]";
                         else if (index === 9)
+                          stickyClasses =
+                            "sticky right-0 z-40 w-[200px] shadow-[-2px_0_6px_-3px_rgba(0,0,0,0.1)]";
+                        else if (index === 4)
                           stickyClasses =
                             "sticky right-0 z-40 w-[200px] shadow-[-2px_0_6px_-3px_rgba(0,0,0,0.1)]";
 

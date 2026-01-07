@@ -76,27 +76,30 @@ export default function FrameworkElements() {
                   disabled={showSpinner}
                 >
                   { showSpinner ? (
+                    <>
                      <svg
-                    className="animate-spin w-5 h-5 text-white"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="10"
-                      cy="10"
-                      r="8.5"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      className="opacity-30"
-                    />
-                    <path
-                      d="M18.5172 10C19.3361 10 20.0113 9.33252 19.8903 8.52257..."
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                      className="animate-spin w-5 h-5 text-white"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="10"
+                        cy="10"
+                        r="8.5"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        className="opacity-30"
+                      />
+                      <path
+                        d="M18.5172 10C19.3361 10 20.0113 9.33252 19.8903 8.52257..."
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <p>this action will take about 1 minute...</p>
+                  </>
                     ) : (
                       <span>Upload</span>
                     )}
